@@ -41,8 +41,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 /media
-/staticfiles
-/static
+#/staticfiles
+#/static
 *.log
 
 # Environment variables
@@ -119,4 +119,5 @@ BACKEND/API_DOCUMENTATION.md
 CASSE-iBroker.postman_collection.json
 
 #Local
-
+*.md
+*.postman_collection.json

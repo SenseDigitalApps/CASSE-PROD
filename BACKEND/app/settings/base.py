@@ -236,21 +236,195 @@ UNFOLD = {
         "image": None,
         "redirect_after": None,
     },
-    "STYLES": [],
+    "STYLES": [
+        """
+        /* Estilos personalizados para colores de marca CASSE */
+        :root {
+            --casse-primary: #3E5E8A;
+            --casse-accent: #CDDD64;
+            --casse-secondary: #D0D9D7;
+            --casse-support: #8398B3;
+        }
+        
+        /* Pestañas seleccionadas */
+        .unfold-tabs .tab.active,
+        .unfold-tabs .tab[aria-selected="true"],
+        nav[aria-label="Breadcrumb"] a.active,
+        .breadcrumb-item.active {
+            color: var(--casse-accent) !important;
+            border-bottom-color: var(--casse-accent) !important;
+        }
+        
+        /* Botones primarios */
+        .button,
+        input[type="submit"],
+        .submit-row input[type="submit"],
+        .submit-row input[type="submit"].default,
+        button[type="submit"],
+        .btn-primary,
+        .button-primary {
+            background-color: var(--casse-accent) !important;
+            border-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        .button:hover,
+        input[type="submit"]:hover,
+        .submit-row input[type="submit"]:hover,
+        .submit-row input[type="submit"].default:hover,
+        button[type="submit"]:hover,
+        .btn-primary:hover,
+        .button-primary:hover {
+            background-color: #b8c95a !important;
+            border-color: #b8c95a !important;
+        }
+        
+        /* Enlaces activos y hover */
+        a:active,
+        a:hover,
+        .object-tools a:hover,
+        .object-tools a:focus {
+            color: var(--casse-accent) !important;
+        }
+        
+        /* Checkboxes y radio buttons seleccionados */
+        input[type="checkbox"]:checked,
+        input[type="radio"]:checked {
+            accent-color: var(--casse-accent) !important;
+        }
+        
+        /* Elementos de navegación activos */
+        .sidebar-menu li.active > a,
+        .sidebar-menu li.active > a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Badges y etiquetas */
+        .badge,
+        .tag,
+        .status-tag {
+            background-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Mensajes de éxito */
+        .messagelist .success,
+        .alert-success {
+            background-color: var(--casse-accent) !important;
+            border-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Focus states */
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus,
+        a:focus {
+            outline-color: var(--casse-accent) !important;
+            box-shadow: 0 0 0 2px rgba(205, 221, 100, 0.3) !important;
+        }
+        
+        /* Botones de acción */
+        .object-tools a,
+        .addlink,
+        .changelink,
+        .deletelink {
+            background-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        .object-tools a:hover,
+        .addlink:hover,
+        .changelink:hover {
+            background-color: #b8c95a !important;
+        }
+        
+        /* Selectores y dropdowns activos */
+        select:focus,
+        .select2-container--default .select2-selection--single:focus,
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: var(--casse-accent) !important;
+        }
+        
+        /* Progress bars */
+        .progress-bar,
+        .progress-bar-fill {
+            background-color: var(--casse-accent) !important;
+        }
+        
+        /* Tooltips */
+        .tooltip {
+            background-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Calendario - día seleccionado */
+        .calendar td.selected a,
+        .calendar td.selected a:hover {
+            background-color: var(--casse-accent) !important;
+            color: #1a1a1a !important;
+        }
+        
+        /* Filtros activos */
+        .changelist-filters li.selected a,
+        .changelist-filters li.selected a:hover {
+            color: var(--casse-accent) !important;
+            border-left-color: var(--casse-accent) !important;
+        }
+        
+        /* Iconos de acción */
+        .action-checkbox:checked + label::before {
+            background-color: var(--casse-accent) !important;
+            border-color: var(--casse-accent) !important;
+        }
+        """
+    ],
     "SCRIPTS": [],
     "COLORS": {
         "primary": {
-            "50": "250 245 255",
-            "100": "243 232 255",
-            "200": "233 213 255",
-            "300": "216 180 254",
-            "400": "192 132 252",
-            "500": "168 85 247",
-            "600": "147 51 234",
-            "700": "126 34 206",
-            "800": "107 33 168",
-            "900": "88 28 135",
-            "950": "59 7 100",
+            # Paleta basada en el color primario de CASSE: Azul #3E5E8A
+            "50": "239 243 248",   # Azul muy claro (base para fondos)
+            "100": "215 225 238",  # Azul claro
+            "200": "187 203 223",  # Azul claro medio
+            "300": "159 181 208",  # Azul medio claro
+            "400": "131 152 179",  # Azul claro de soporte (#8398B3)
+            "500": "62 94 138",    # Azul primario CASSE (#3E5E8A)
+            "600": "52 79 115",    # Azul medio oscuro
+            "700": "42 64 92",     # Azul oscuro
+            "800": "32 49 69",     # Azul muy oscuro
+            "900": "22 34 46",     # Azul casi negro
+            "950": "15 23 31",     # Azul negro
+        },
+        # Colores de acento (verde CASSE)
+        "accent": {
+            "50": "250 252 247",   # Verde muy claro
+            "100": "245 250 235",  # Verde claro
+            "200": "235 245 215",  # Verde claro medio
+            "300": "225 240 195",  # Verde medio claro
+            "400": "215 235 175",  # Verde medio
+            "500": "205 221 100",  # Verde acento CASSE (#CDDD64)
+            "600": "185 199 90",   # Verde medio oscuro
+            "700": "165 177 80",   # Verde oscuro
+            "800": "145 155 70",   # Verde muy oscuro
+            "900": "125 133 60",   # Verde casi negro
+            "950": "105 111 50",   # Verde negro
+        },
+        # Verde gris de soporte
+        "secondary": {
+            "50": "250 251 251",   # Verde gris muy claro
+            "100": "245 247 247",  # Verde gris claro
+            "200": "235 239 239",  # Verde gris claro medio
+            "300": "225 231 231",  # Verde gris medio claro
+            "400": "215 223 223",  # Verde gris medio
+            "500": "208 217 215",  # Verde gris CASSE (#D0D9D7)
+            "600": "187 195 194",  # Verde gris medio oscuro
+            "700": "166 173 173",  # Verde gris oscuro
+            "800": "145 151 152",  # Verde gris muy oscuro
+            "900": "124 129 131",  # Verde gris casi negro
+            "950": "103 107 110",  # Verde gris negro
         },
     },
     "EXTENSIONS": {
