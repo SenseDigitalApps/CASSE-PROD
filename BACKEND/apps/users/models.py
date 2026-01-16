@@ -28,8 +28,8 @@ class UserManager(BaseUserManager):
         """Create and save a superuser."""
         extra_fields.setdefault('role', User.Role.ADMIN)
         extra_fields.setdefault('status', User.Status.ACTIVE)
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+       #extra_fields.setdefault('is_staff', True)
+       #extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('role') != User.Role.ADMIN:
             raise ValueError('Superuser debe tener role=ADMIN')
