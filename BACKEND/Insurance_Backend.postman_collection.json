@@ -35,7 +35,7 @@
 			"name": "Authentication",
 			"item": [
 				{
-					"name": "Register",
+					"name": "Register (Step 1: Create Account)",
 					"event": [
 						{
 							"listen": "test",
@@ -43,7 +43,7 @@
 								"exec": [
 									"if (pm.response.code === 201) {",
 									"    var jsonData = pm.response.json();",
-									"    pm.environment.set(\"user_id\", jsonData.id);",
+									"    pm.environment.set(\"session_token\", jsonData.session_token);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -74,12 +74,13 @@
 								"register",
 								""
 							]
-						}
+						},
+						"description": "Register (Step 1): Registra un nuevo usuario o reactiva un usuario eliminado.\n\n- Si el usuario NO existe: Crea un nuevo usuario en estado SUSPENDED y envía un código OTP por email.\n- Si el usuario existe con status DELETED: Lo reactiva automáticamente, actualiza sus datos, cambia su contraseña, y envía un código OTP por email.\n- Si el usuario existe con status ACTIVE o SUSPENDED: Rechaza el registro con error.\n\nRetorna:\n- session_token: Token temporal para verificar OTP\n- expires_in: Tiempo de expiración en segundos (1200 = 20 minutos)\n\nIMPORTANTE: Después de este paso, debes usar \"Verify OTP (Step 2)\" con el código recibido por email para activar la cuenta.\n\nNOTA: El mensaje de respuesta es el mismo tanto para registro nuevo como para reactivación, para que el usuario no note diferencia."
 					},
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "Verify OTP (Step 2)",
 					"event": [
 						{
 							"listen": "test",
@@ -90,6 +91,82 @@
 									"    pm.environment.set(\"access_token\", jsonData.access);",
 									"    pm.environment.set(\"refresh_token\", jsonData.refresh);",
 									"    pm.environment.set(\"user_id\", jsonData.user.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"session_token\": \"{{session_token}}\",\n  \"otp_code\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/verify-otp/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"verify-otp",
+								""
+							]
+						},
+						"description": "Step 2 para REGISTRO y LOGIN: Verifica el código OTP recibido por email.\n\n- Para REGISTRO: Activa la cuenta y retorna tokens JWT\n- Para LOGIN: Retorna tokens JWT directamente\n\nUsa el session_token recibido en el Step 1 (Register o Login) y el código OTP del email."
+					},
+					"response": []
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"session_token\": \"{{session_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/resend-otp/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"resend-otp",
+								""
+							]
+						},
+						"description": "Solicita un nuevo código OTP. Máximo 3 reenvíos por hora. Cooldown de 2 minutos entre reenvíos."
+					},
+					"response": []
+				},
+				{
+					"name": "Login (Step 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"session_token\", jsonData.session_token);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -120,7 +197,8 @@
 								"login",
 								""
 							]
-						}
+						},
+						"description": "Login (Step 1): Valida credenciales y envía código OTP por email.\n\nRetorna:\n- session_token: Token temporal para verificar OTP\n- expires_in: Tiempo de expiración en segundos (1200 = 20 minutos)\n\nIMPORTANTE: Después de este paso, debes usar \"Verify OTP (Step 2)\" con el código recibido por email."
 					},
 					"response": []
 				},
@@ -166,6 +244,84 @@
 								""
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset Request (Step 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"session_token\", jsonData.session_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email_primary\": \"user@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/password-reset/request/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"password-reset",
+								"request",
+								""
+							]
+						},
+						"description": "Password Reset Request (Step 1): Solicita recuperación de contraseña. Envía un código OTP por email.\n\nRetorna:\n- session_token: Token temporal para verificar OTP\n- expires_in: Tiempo de expiración en segundos (1200 = 20 minutos)\n\nIMPORTANTE: Después de este paso, debes usar \"Password Reset Verify (Step 2)\" con el código recibido por email para restablecer la contraseña.\n\nNOTA: Por seguridad, siempre retorna el mismo mensaje genérico, incluso si el email no existe."
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset Verify (Step 2)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"session_token\": \"{{session_token}}\",\n  \"otp_code\": \"123456\",\n  \"new_password\": \"NewSecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/password-reset/verify/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"password-reset",
+								"verify",
+								""
+							]
+						},
+						"description": "Password Reset Verify (Step 2): Verifica el código OTP y establece la nueva contraseña.\n\nRequiere:\n- session_token: Token recibido en el paso 1\n- otp_code: Código OTP de 6 dígitos recibido por email\n- new_password: Nueva contraseña que debe cumplir las políticas de seguridad\n\nRetorna:\n- message: Confirmación de que la contraseña fue restablecida\n\nNOTA: Después de restablecer la contraseña, el usuario puede hacer login con la nueva contraseña."
 					},
 					"response": []
 				}
@@ -233,6 +389,72 @@
 								""
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete My Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/me/delete/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"delete",
+								""
+							]
+						},
+						"description": "Elimina la cuenta del usuario autenticado (soft delete). Cambia el estado a DELETED y guarda la fecha de eliminación. El usuario no podrá hacer login después de esto. Cumple con requerimientos de stores (App Store, Google Play)."
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"current_password\": \"CurrentPassword123!\",\n  \"new_password\": \"NewSecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/me/change-password/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"change-password",
+								""
+							]
+						},
+						"description": "Change Password: Permite al usuario autenticado cambiar su contraseña.\n\nRequiere autenticación (Bearer token).\n\nRequiere:\n- current_password: Contraseña actual del usuario\n- new_password: Nueva contraseña que debe cumplir las políticas de seguridad\n\nValidaciones:\n- La contraseña actual debe ser correcta\n- La nueva contraseña debe ser diferente a la actual\n- La nueva contraseña debe cumplir las políticas de seguridad (mínimo 8 caracteres, no completamente numérica, etc.)\n\nRetorna:\n- message: Confirmación de que la contraseña fue cambiada"
 					},
 					"response": []
 				},
@@ -453,6 +675,11 @@
 		},
 		{
 			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "session_token",
 			"value": "",
 			"type": "string"
 		}

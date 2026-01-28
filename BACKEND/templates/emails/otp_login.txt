@@ -1,0 +1,20 @@
+CASSE Seguros - Código de Verificación
+
+Hola {{ user.full_name }},
+
+Has solicitado un código de verificación para iniciar sesión en tu cuenta de CASSE Seguros.
+
+Tu código de verificación es:
+
+{{ otp_code }}
+
+Este código expirará en {{ expiration_minutes }} minutos.
+
+IMPORTANTE:
+- Si no solicitaste este código, ignora este mensaje.
+- Por seguridad, nunca compartas este código con nadie.
+- CASSE Seguros nunca te pedirá tu código de verificación por teléfono o email.
+
+Este es un email automático, por favor no respondas.
+
+© {{ "now"|date:"Y" }} CASSE Seguros. Todos los derechos reservados.

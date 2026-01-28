@@ -63,7 +63,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,6 +106,13 @@ else:
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
+# Custom Authentication Backend
+# Allows login using email_primary instead of username
+AUTHENTICATION_BACKENDS = [
+    'apps.users.backends.EmailBackend',  # Custom backend for email_primary
+    'django.contrib.auth.backends.ModelBackend',  # Fallback to default
+]
+
 # Password hashing
 # Use Argon2 as the default password hasher (stronger than PBKDF2)
 # Falls back to PBKDF2 if Argon2 is not available
@@ -143,6 +150,40 @@ LANGUAGE_CODE = 'es-co'
 TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
+
+# Email Configuration
+# Para desarrollo local: puede usar console backend o SMTP real según configuración
+# Para producción: usa SMTP real
+# Si EMAIL_USE_SMTP está en 'true', usa SMTP incluso en desarrollo
+USE_SMTP = os.getenv('EMAIL_USE_SMTP', 'false').lower() == 'true'
+
+if DEBUG and not USE_SMTP:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    # Usar backend personalizado que configura HELO name correctamente
+    EMAIL_BACKEND = 'apps.common.backends.email.CustomSMTPEmailBackend'
+
+# SMTP Configuration
+# Configuración para mail.sensedigital.com.co
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'mail.sensedigital.com.co')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '465'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'false').lower() == 'true'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'true').lower() == 'true'  # Puerto 465 usa SSL
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'casse@sensedigital.com.co')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'casse@sensedigital.com.co')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# Configuración adicional para SMTP
+EMAIL_TIMEOUT = 30
+# HELO name para SMTP (debe ser un dominio válido)
+EMAIL_HELO_NAME = os.getenv('EMAIL_HELO_NAME', 'mail.sensedigital.com.co')
+
+# OTP Configuration
+OTP_CODE_LENGTH = 6
+OTP_EXPIRATION_MINUTES = 20
+OTP_MAX_ATTEMPTS = 3
+OTP_MAX_RESEND_PER_HOUR = 3
+OTP_RESEND_COOLDOWN_SECONDS = 120  # 2 minutos
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -211,6 +252,18 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+# Cache Configuration (using Redis for OTP storage)
+# Parse Redis URL for cache configuration
+redis_url_parsed = urlparse(REDIS_URL)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
+        'KEY_PREFIX': 'casse',
+        'TIMEOUT': 300,  # Default timeout (5 minutes)
+    }
+}
 
 # DRF Spectacular (OpenAPI)
 SPECTACULAR_SETTINGS = {

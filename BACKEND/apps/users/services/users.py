@@ -17,6 +17,8 @@ from apps.audit.constants import (
     USER_UPDATED_SELF,
     USER_SUSPENDED,
     USER_ACTIVATED,
+    USER_DELETED_SELF,
+    PASSWORD_CHANGED,
 )
 
 User = get_user_model()
@@ -460,5 +462,114 @@ def activate_user(
         raise
     except Exception as e:
         logger.error(f"Error al activar usuario: {e}", exc_info=True)
+        raise
+
+
+def delete_self_account(
+    user: User,
+    ip_address: Optional[str] = None
+) -> User:
+    """
+    Elimina la cuenta del usuario (soft delete).
+    Cambia el estado a DELETED y guarda la fecha de eliminación.
+    
+    Args:
+        user: Usuario que elimina su propia cuenta
+        ip_address: IP del cliente (opcional)
+    
+    Returns:
+        User: Usuario con estado DELETED
+    
+    Raises:
+        ValidationError: Si el usuario ya está eliminado
+    """
+    # Verificar que no esté ya eliminado
+    if user.status == User.Status.DELETED:
+        raise ValidationError('La cuenta ya ha sido eliminada')
+    
+    try:
+        # Cambiar estado a DELETED
+        user.status = User.Status.DELETED
+        
+        # Guardar fecha de eliminación
+        from django.utils import timezone
+        user.deleted_at = timezone.now()
+        
+        # Guardar usuario
+        user.save(update_fields=['status', 'deleted_at'])
+        
+        # Generar audit log
+        log_audit_event(
+            actor_user=user,
+            action=USER_DELETED_SELF,
+            entity='User',
+            entity_id=user.id,
+            metadata={
+                'email': user.email_primary,
+                'deleted_at': user.deleted_at.isoformat(),
+            },
+            ip_address=ip_address
+        )
+        
+        logger.info(f"Usuario {user.email_primary} eliminó su propia cuenta")
+        return user
+        
+    except Exception as e:
+        logger.error(f"Error al eliminar cuenta propia: {e}", exc_info=True)
+        raise
+
+
+def change_password(
+    user: User,
+    current_password: str,
+    new_password: str,
+    ip_address: Optional[str] = None
+) -> User:
+    """
+    Cambia la contraseña del usuario autenticado.
+    
+    Args:
+        user: Usuario que cambia su contraseña
+        current_password: Contraseña actual del usuario
+        new_password: Nueva contraseña
+        ip_address: IP del cliente (opcional)
+    
+    Returns:
+        User: Usuario actualizado
+    
+    Raises:
+        ValidationError: Si la contraseña actual es incorrecta o la nueva contraseña no cumple validaciones
+    """
+    # Validar contraseña actual
+    if not user.check_password(current_password):
+        raise ValidationError('La contraseña actual es incorrecta')
+    
+    # Validar que la nueva contraseña sea diferente
+    if user.check_password(new_password):
+        raise ValidationError('La nueva contraseña debe ser diferente a la actual')
+    
+    try:
+        # Cambiar contraseña
+        user.set_password(new_password)
+        user.save(update_fields=['password'])
+        
+        # Generar audit log
+        log_audit_event(
+            actor_user=user,
+            action=PASSWORD_CHANGED,
+            entity='User',
+            entity_id=user.id,
+            metadata={
+                'email': user.email_primary,
+                'password_changed': True,
+            },
+            ip_address=ip_address
+        )
+        
+        logger.info(f"Usuario {user.email_primary} cambió su contraseña")
+        return user
+        
+    except Exception as e:
+        logger.error(f"Error al cambiar contraseña: {e}", exc_info=True)
         raise
 

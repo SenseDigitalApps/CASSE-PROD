@@ -98,22 +98,124 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'full_name': {'required': True},
             'id_type': {'required': True},
             'id_number': {'required': True},
-            'email_primary': {'required': True},
+            'email_primary': {
+                'required': True,
+                # Deshabilitar validación automática de unicidad
+                # La validamos manualmente en validate_email_primary()
+                'validators': []
+            },
             'phone': {'required': True},
             'birth_date': {'required': True},
             'email_secondary': {'required': False, 'allow_blank': True},
             'address': {'required': False, 'allow_blank': True},
             'profile_photo_url': {'required': False, 'allow_blank': True},
         }
+    
+    def __init__(self, *args, **kwargs):
+        """
+        Deshabilitar validación automática de unique_together.
+        La validamos manualmente en validate().
+        """
+        super().__init__(*args, **kwargs)
+        # Remover validadores de unique_together
+        if hasattr(self, 'fields'):
+            # No hay forma directa de deshabilitar unique_together en DRF
+            # Lo manejamos en validate() y capturamos IntegrityError
+            pass
 
     def validate_email_primary(self, value):
         """
-        Validate that email is unique.
+        Validate that email is unique, but allow if user is DELETED (will be reactivated).
         """
         value = value.strip().lower()
-        if User.objects.filter(email_primary=value).exists():
-            raise serializers.ValidationError('Este email ya está en uso')
+        existing_user = User.objects.filter(email_primary=value).first()
+        
+        if existing_user:
+            # Si el usuario existe y NO está eliminado, rechazar
+            if existing_user.status != User.Status.DELETED:
+                raise serializers.ValidationError('Este email ya está en uso')
+            # Si está DELETED, permitir (se reactivará en la vista)
+        
         return value
+
+    def validate(self, attrs):
+        """
+        Validate that id_type + id_number combination is unique, but allow if user is DELETED.
+        """
+        email = attrs.get('email_primary', '').strip().lower()
+        id_type = attrs.get('id_type')
+        id_number = attrs.get('id_number')
+        
+        # Validar combinación id_type + id_number
+        existing_by_id = User.objects.filter(
+            id_type=id_type,
+            id_number=id_number
+        ).first()
+        
+        if existing_by_id:
+            # Si existe y NO está eliminado, rechazar
+            if existing_by_id.status != User.Status.DELETED:
+                raise serializers.ValidationError({
+                    'id_number': 'Esta identificación ya está registrada'
+                })
+            # Si está DELETED pero el email es diferente, rechazar
+            # (misma persona, email diferente = inconsistencia)
+            if existing_by_id.email_primary.lower() != email:
+                raise serializers.ValidationError({
+                    'id_number': 'Esta identificación ya está registrada con otro email'
+                })
+        
+        return attrs
+    
+    def run_validation(self, data=None):
+        """
+        Override to catch unique_together validation errors and check if user is DELETED.
+        """
+        try:
+            return super().run_validation(data)
+        except serializers.ValidationError as e:
+            # Si el error es de unique_together, verificar si el usuario está DELETED
+            if hasattr(e, 'detail') and isinstance(e.detail, dict):
+                non_field_errors = e.detail.get('non_field_errors', [])
+                if non_field_errors:
+                    error_str = str(non_field_errors[0]).lower()
+                    if 'id_type' in error_str and 'id_number' in error_str and ('único' in error_str or 'unique' in error_str):
+                        # Intentar obtener los datos para verificar si el usuario está DELETED
+                        try:
+                            if isinstance(data, dict):
+                                email = data.get('email_primary', '').strip().lower()
+                                id_type = data.get('id_type')
+                                id_number = data.get('id_number')
+                                
+                                if id_type and id_number:
+                                    existing_user = User.objects.filter(
+                                        id_type=id_type,
+                                        id_number=id_number
+                                    ).first()
+                                    
+                                    if existing_user and existing_user.status == User.Status.DELETED:
+                                        # Si el usuario está DELETED, permitir (se reactivará en la vista)
+                                        # Verificar que el email coincida
+                                        if email and existing_user.email_primary.lower() != email:
+                                            raise serializers.ValidationError({
+                                                'id_number': 'Esta identificación ya está registrada con otro email'
+                                            })
+                                        # Si todo está bien, continuar sin error de unique_together
+                                        # Necesitamos ejecutar la validación pero ignorar el error de unique_together
+                                        # Para esto, ejecutamos la validación manualmente sin el unique_together
+                                        validated_data = {}
+                                        for field_name, field in self.fields.items():
+                                            if field_name in data:
+                                                validated_data[field_name] = field.to_internal_value(data[field_name])
+                                        
+                                        # Ejecutar validate() manualmente
+                                        return self.validate(validated_data)
+                        except Exception as inner_error:
+                            # Si hay error interno, re-lanzar el error original
+                            pass
+            
+            # Re-lanzar el error original si no se puede manejar
+            raise
 
     def create(self, validated_data):
         """
@@ -371,4 +473,46 @@ class UserMeUpdateSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for changing password (authenticated user).
+    Requires current password and new password.
+    """
+    current_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'},
+        help_text="Contraseña actual del usuario"
+    )
+    new_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        validators=[validate_password],
+        style={'input_type': 'password'},
+        help_text="Nueva contraseña que debe cumplir las políticas de seguridad"
+    )
+
+    def validate(self, attrs):
+        """
+        Validate that current password is correct and new password is different.
+        """
+        user = self.context['request'].user
+        current_password = attrs.get('current_password')
+        new_password = attrs.get('new_password')
+        
+        # Verificar contraseña actual
+        if not user.check_password(current_password):
+            raise serializers.ValidationError({
+                'current_password': 'La contraseña actual es incorrecta'
+            })
+        
+        # Verificar que la nueva contraseña sea diferente a la actual
+        if user.check_password(new_password):
+            raise serializers.ValidationError({
+                'new_password': 'La nueva contraseña debe ser diferente a la actual'
+            })
+        
+        return attrs
 

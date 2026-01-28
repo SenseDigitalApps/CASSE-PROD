@@ -26,10 +26,12 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email_primary, password=None, **extra_fields):
         """Create and save a superuser."""
+        # Establecer role como ADMIN (is_staff e is_superuser son propiedades calculadas)
         extra_fields.setdefault('role', User.Role.ADMIN)
         extra_fields.setdefault('status', User.Status.ACTIVE)
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        # NO establecer is_staff e is_superuser - son propiedades calculadas desde role
+        # extra_fields.setdefault('is_staff', True)  # Removido - es una propiedad
+        # extra_fields.setdefault('is_superuser', True)  # Removido - es una propiedad
 
         if extra_fields.get('role') != User.Role.ADMIN:
             raise ValueError('Superuser debe tener role=ADMIN')
@@ -58,6 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Status(models.TextChoices):
         ACTIVE = 'ACTIVE', 'Activo'
         SUSPENDED = 'SUSPENDED', 'Suspendido'
+        DELETED = 'DELETED', 'Eliminado'
 
     # Primary key
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -97,6 +100,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creación')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de Actualización')
     last_login_at = models.DateTimeField(null=True, blank=True, verbose_name='Último Inicio de Sesión')
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name='Fecha de Eliminación')
 
     # Django auth fields
     USERNAME_FIELD = 'email_primary'

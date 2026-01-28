@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, PermissionDenied
+from django.core.exceptions import ValidationError
 
 from .models import User
 from .serializers import (
@@ -16,6 +17,7 @@ from .serializers import (
     UserCreateByAdminSerializer,
     UserUpdateByAdminSerializer,
     UserMeUpdateSerializer,
+    ChangePasswordSerializer,
 )
 from .permissions import IsAdmin, IsAdminOrReadOnly, IsOwnerOrAdmin
 from .selectors.users import get_user_by_id, list_users
@@ -25,6 +27,8 @@ from .services.users import (
     update_self_user,
     suspend_user,
     activate_user,
+    delete_self_account,
+    change_password,
 )
 
 logger = logging.getLogger(__name__)
@@ -346,6 +350,96 @@ class UserActivateView(APIView):
         
         return Response(
             {'detail': 'user activated'},
+            status=status.HTTP_200_OK
+        )
+
+
+class DeleteSelfAccountView(APIView):
+    """
+    View for user to delete their own account.
+    POST /api/v1/users/me/delete/ - Delete own account
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        Delete current user's account (soft delete).
+        Changes status to DELETED and prevents future logins.
+        """
+        ip_address = get_client_ip(request)
+        
+        try:
+            delete_self_account(
+                user=request.user,
+                ip_address=ip_address
+            )
+        except ValidationError as e:
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error al eliminar cuenta propia: {e}", exc_info=True)
+            return Response(
+                {'detail': 'Error al procesar solicitud de eliminación'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+        return Response(
+            {'status': 'usuario eliminado correctamente'},
+            status=status.HTTP_200_OK
+        )
+
+
+class ChangePasswordView(APIView):
+    """
+    View for authenticated user to change their password.
+    POST /api/v1/users/me/change-password/
+    
+    Requires current password and new password.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        Change current user's password.
+        """
+        serializer = ChangePasswordSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        ip_address = get_client_ip(request)
+        current_password = serializer.validated_data['current_password']
+        new_password = serializer.validated_data['new_password']
+        
+        try:
+            change_password(
+                user=request.user,
+                current_password=current_password,
+                new_password=new_password,
+                ip_address=ip_address
+            )
+        except ValidationError as e:
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Error al cambiar contraseña: {e}", exc_info=True)
+            return Response(
+                {'detail': 'Error al procesar solicitud de cambio de contraseña'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+        return Response(
+            {'message': 'Contraseña cambiada correctamente'},
             status=status.HTTP_200_OK
         )
 

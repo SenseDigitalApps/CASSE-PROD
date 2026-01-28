@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Verificación - CASSE Seguros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            color: #3E5E8A;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .otp-code {
+            background-color: #3E5E8A;
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            letter-spacing: 5px;
+            margin: 30px 0;
+        }
+        .info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #CDDD64;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 12px;
+        }
+        .warning {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .welcome {
+            color: #3E5E8A;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">CASSE Seguros</div>
+        </div>
+        
+        <div class="welcome">¡Bienvenido a CASSE Seguros, {{ user.full_name }}!</div>
+        
+        <p>Gracias por registrarte. Para activar tu cuenta, necesitamos verificar tu dirección de email.</p>
+        
+        <p>Utiliza el siguiente código de verificación para completar tu registro:</p>
+        
+        <div class="otp-code">
+            {{ otp_code }}
+        </div>
+        
+        <div class="info">
+            <p><strong>Este código expirará en {{ expiration_minutes }} minutos.</strong></p>
+            <p>Si no te registraste en CASSE Seguros, ignora este mensaje o contacta a soporte si tienes dudas.</p>
+        </div>
+        
+        <p class="warning">⚠️ Por seguridad, nunca compartas este código con nadie. CASSE Seguros nunca te pedirá tu código de verificación por teléfono o email.</p>
+        
+        <p>Una vez verificado, podrás acceder a todos los servicios de CASSE Seguros.</p>
+        
+        <div class="footer">
+            <p>Este es un email automático, por favor no respondas.</p>
+            <p>&copy; {{ "now"|date:"Y" }} CASSE Seguros. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

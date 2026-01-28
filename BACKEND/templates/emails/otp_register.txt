@@ -1,0 +1,22 @@
+CASSE Seguros - Código de Verificación para Activar tu Cuenta
+
+¡Bienvenido a CASSE Seguros, {{ user.full_name }}!
+
+Gracias por registrarte. Para activar tu cuenta, necesitamos verificar tu dirección de email.
+
+Utiliza el siguiente código de verificación para completar tu registro:
+
+{{ otp_code }}
+
+Este código expirará en {{ expiration_minutes }} minutos.
+
+IMPORTANTE:
+- Si no te registraste en CASSE Seguros, ignora este mensaje.
+- Por seguridad, nunca compartas este código con nadie.
+- CASSE Seguros nunca te pedirá tu código de verificación por teléfono o email.
+
+Una vez verificado, podrás acceder a todos los servicios de CASSE Seguros.
+
+Este es un email automático, por favor no respondas.
+
+© {{ "now"|date:"Y" }} CASSE Seguros. Todos los derechos reservados.
