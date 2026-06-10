@@ -38,5 +38,8 @@ urlpatterns = [
     path('api/v1/health/', include('apps.health.urls')),
     path('api/v1/auth/', include('apps.authn.urls')),
     path('api/v1/users/', include('apps.users.urls')),
+    #Vista para la autenticación del usuario por medio de JWT
+
+    path("auth/", include("apps.authn.urls")),
 ]
 

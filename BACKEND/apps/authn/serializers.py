@@ -49,7 +49,8 @@ class LoginSerializer(serializers.Serializer):
         if user.status == User.Status.DELETED:
             raise serializers.ValidationError('Cuenta eliminada. Contacta a soporte si deseas reactivarla.')
         
-        if user.status != User.Status.ACTIVE:
+
+        if user.status != User.Status.ACTIVE and user.status != User.Status.PENDING:
             raise serializers.ValidationError('Usuario suspendido')
 
         attrs['user'] = user
@@ -113,7 +114,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
             raise serializers.ValidationError('Si el email existe, recibirás un código de verificación')
         
         # Verificar que el usuario esté activo o suspendido (no eliminado)
-        if user.status not in [User.Status.ACTIVE, User.Status.SUSPENDED]:
+        if user.status not in [User.Status.ACTIVE, User.Status.SUSPENDED, User.Status.PENDING]:
             raise serializers.ValidationError('Si el email existe, recibirás un código de verificación')
         
         attrs['user'] = user

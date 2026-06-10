@@ -9,7 +9,11 @@ from .views import (
     VerifyOTPView,
     ResendOTPView,
     PasswordResetRequestView,
-    PasswordResetVerifyOTPView
+    PasswordResetVerifyOTPView,
+
+    #Vista para la autenticación del usuario por medio de JWT
+
+    AdminTokenLoginView
 )
 
 urlpatterns = [
@@ -20,5 +24,9 @@ urlpatterns = [
     path('password-reset/request/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('password-reset/verify/', PasswordResetVerifyOTPView.as_view(), name='password-reset-verify'),
     path('jwt/refresh/', RefreshTokenView.as_view(), name='token_refresh'),
+
+    #Vista para la autenticación del usuario por medio de JWT
+
+    path('admin-token-login/', AdminTokenLoginView.as_view(), name='admin_token_login'),
 ]
 

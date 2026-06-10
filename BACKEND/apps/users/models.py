@@ -7,6 +7,9 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.utils import timezone
 
 
+from django.db.models import Q
+
+
 class UserManager(BaseUserManager):
     """Manager for custom User model."""
 
@@ -61,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ACTIVE = 'ACTIVE', 'Activo'
         SUSPENDED = 'SUSPENDED', 'Suspendido'
         DELETED = 'DELETED', 'Eliminado'
+        PENDING = 'PENDING', 'Pendiente verificación'
 
     # Primary key
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -79,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_photo_url = models.URLField(null=True, blank=True, verbose_name='URL Foto de Perfil')
 
     # Email
-    email_primary = models.EmailField(unique=True, verbose_name='Email Principal')
+    email_primary = models.EmailField(verbose_name='Email Principal')
     email_secondary = models.EmailField(null=True, blank=True, verbose_name='Email Secundario')
 
     # Role and status
@@ -111,7 +115,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
-        unique_together = [('id_type', 'id_number')]
+        # unique_together = [('id_type', 'id_number')]
+
+        
+        constraints = [
+            models.UniqueConstraint(
+                fields=['id_type', 'id_number'],
+                condition=~Q(status='DELETED'),
+                name='unique_id_not_deleted'
+            ),
+            models.UniqueConstraint(
+                fields=['email_primary'],
+                condition=~Q(status='DELETED'),
+                name='unique_email_not_deleted'
+            ),
+        ]
+
         indexes = [
             models.Index(fields=['email_primary']),
             models.Index(fields=['role', 'status']),
@@ -144,17 +163,27 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Return True if user is active."""
         return self.status == self.Status.ACTIVE
 
-    @property
-    def is_staff(self):
-        """Return True if user is staff (admin)."""
-        return self.role == self.Role.ADMIN
+    # @property
+    # def is_staff(self):
+    #     """Return True if user is staff (admin)."""
+    #     return self.role == self.Role.ADMIN
 
-    @property
-    def is_superuser(self):
-        """Return True if user is superuser (admin)."""
-        return self.role == self.Role.ADMIN
+    # @property
+    # def is_superuser(self):
+    #     """Return True if user is superuser (admin)."""
+    #     return self.role == self.Role.ADMIN
+
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         """Override save to update last_login_at if needed."""
+        if self.role == self.Role.ADMIN:
+            self.is_staff = True
+            self.is_superuser = True
+        else:
+            self.is_staff = False
+            self.is_superuser = False
+
         super().save(*args, **kwargs)
 

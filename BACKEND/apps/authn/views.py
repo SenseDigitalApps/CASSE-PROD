@@ -9,6 +9,16 @@ from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.views import TokenRefreshView
 
+#Vista para la autenticación del usuario por medio de JWT
+from django.contrib.auth import login, get_user_model
+from django.http import HttpResponseRedirect, HttpResponse
+from django.views import View
+from rest_framework_simplejwt.tokens import AccessToken
+
+User = get_user_model()
+#Vista para la autenticación del usuario por medio de JWT
+
+
 from .serializers import (
     LoginSerializer, 
     VerifyOTPSerializer, 
@@ -81,6 +91,9 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         ip_address = get_client_ip(request)
         
+
+        print(f"El serializer is valid?: {not serializer.is_valid()}")
+
         if not serializer.is_valid():
             # Intentar obtener email para audit log
             email = request.data.get('email_primary', '')
@@ -118,7 +131,7 @@ class LoginView(APIView):
             )
         
         # Verificar que el usuario esté activo
-        if user.status != user.Status.ACTIVE:
+        if user.status != user.Status.ACTIVE and user.status != user.Status.PENDING:
             log_audit_event(
                 actor_user=user,
                 action=LOGIN_FAILED,
@@ -138,7 +151,7 @@ class LoginView(APIView):
             session_token = generate_session_token()
             
             # Almacenar OTP en Redis
-            if not store_otp(str(user.id), session_token, otp_code, purpose='LOGIN'):
+            if not store_otp(str(user.id), session_token, otp_code, purpose='LOGIN' if user.status != user.Status.PENDING else 'REGISTER' ):
                 logger.error(f"Error al almacenar OTP para usuario {user.id}")
                 return Response(
                     {'detail': 'Error al generar código de verificación'},
@@ -216,16 +229,21 @@ class RegisterView(APIView):
         if email_primary:
             existing_user = User.objects.filter(
                 email_primary=email_primary,
-                status=User.Status.DELETED
+                status=User.Status.DELETED 
             ).first()
-        
-        if not existing_user and id_type and id_number:
-            existing_user = User.objects.filter(
-                id_type=id_type,
-                id_number=id_number,
-                status=User.Status.DELETED
-            ).first()
-        
+            
+            print(f"EL USUARIO EXISTE: {existing_user}")
+
+            if existing_user == None:
+                existing_user = User.objects.filter(
+                    email_primary=email_primary,
+                    status=User.Status.PENDING 
+                ).first()
+
+            print(f"EL USUARIO EXISTE 2: {existing_user}")
+
+
+
         # Si hay usuario DELETED, validar manualmente los datos sin usar el serializer completo
         # para evitar el error de unique_together
         if existing_user:
@@ -286,7 +304,9 @@ class RegisterView(APIView):
                 user.set_password(password)
                 
                 # Reactivar: cambiar status y limpiar deleted_at
-                user.status = User.Status.SUSPENDED
+                # user.status = User.Status.SUSPENDED
+                user.status = User.Status.PENDING
+                
                 user.deleted_at = None
                 
                 # Guardar cambios
@@ -308,7 +328,9 @@ class RegisterView(APIView):
             else:
                 # CREAR NUEVO USUARIO
                 validated_data.setdefault('role', User.Role.CLIENT)
-                validated_data.setdefault('status', User.Status.SUSPENDED)
+
+                # Cambio de estado al momento de registrar
+                validated_data.setdefault('status', User.Status.PENDING)
                 
                 user = User.objects.create_user(
                     email_primary=validated_data.pop('email_primary'),
@@ -508,6 +530,8 @@ class VerifyOTPView(APIView):
         serializer = VerifyOTPSerializer(data=request.data)
         ip_address = get_client_ip(request)
         
+        print(f"Serializaer del codigo otp: {not serializer.is_valid()}")
+
         if not serializer.is_valid():
             return Response(
                 serializer.errors,
@@ -517,6 +541,13 @@ class VerifyOTPView(APIView):
         session_token = serializer.validated_data['session_token']
         otp_code = serializer.validated_data['otp_code']
         
+        
+        print(f"Serializaer del session_token: {session_token}")
+        print(f"Serializaer del otp_code: {otp_code}")
+
+
+
+
         # Obtener usuario desde session token
         user = get_user_from_session_token(session_token)
         
@@ -534,12 +565,18 @@ class VerifyOTPView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
         
-        # Determinar propósito: si el usuario está SUSPENDED, es REGISTER; si está ACTIVE, es LOGIN
-        purpose = 'REGISTER' if user.status == User.Status.SUSPENDED else 'LOGIN'
+        # Determinar propósito: si el usuario está SUSPENDED, o PENDING es REGISTER; si está ACTIVE, es LOGIN
+        # purpose = 'REGISTER' if (user.status == User.Status.SUSPENDED) or (user.status == User.Status.PENDING)  else 'LOGIN'
+        purpose = 'REGISTER' if (user.status == User.Status.SUSPENDED) or (user.status == User.Status.PENDING)  else 'LOGIN'
+
         
+        print(f"Cual es el proposito? {purpose}")
+
         # Validar OTP
         is_valid, message = validate_otp(str(user.id), session_token, otp_code, purpose=purpose)
         
+        print(f"Es valido el código enviado? {is_valid}")
+
         if not is_valid:
             log_audit_event(
                 actor_user=user,
@@ -557,7 +594,7 @@ class VerifyOTPView(APIView):
         # OTP válido
         # Si es REGISTER, activar usuario
         if purpose == 'REGISTER':
-            if user.status == User.Status.SUSPENDED:
+            if user.status == User.Status.SUSPENDED or user.status == User.Status.PENDING:
                 user.status = User.Status.ACTIVE
                 user.save(update_fields=['status'])
                 
@@ -930,3 +967,46 @@ class RefreshTokenView(TokenRefreshView):
     """
     permission_classes = [AllowAny]
 
+
+
+class AdminTokenLoginView(View):
+    """
+    Permite iniciar sesión en el Django Admin utilizando un JWT enviado por GET.
+    URL: /auth/admin-token-login/?token=<jwt>
+    """
+
+    def get(self, request):
+        token = request.GET.get("token")
+
+        if not token:
+            return HttpResponse("Token requerido", status=400)
+
+        try:
+            # Decodificar token
+            access_token = AccessToken(token)
+
+            # Obtener user_id desde el JWT
+            user_id = access_token.get("user_id")
+
+            if not user_id:
+                return HttpResponse("Token inválido", status=401)
+
+            # Buscar usuario
+            user = User.objects.get(id=user_id)
+
+            # Validar que pueda entrar al admin
+            if not user.is_staff:
+                return HttpResponse("No autorizado", status=403)
+
+            # Crear sesión en Django
+            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+
+            # Redirigir al admin
+            return HttpResponseRedirect("/admin/")
+
+        except User.DoesNotExist:
+            return HttpResponse("Usuario no encontrado", status=404)
+
+        except Exception as e:
+            logger.error(f"Error en admin_token_login: {e}", exc_info=True)
+            return HttpResponse("Token inválido o expirado", status=401)
