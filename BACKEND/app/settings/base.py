@@ -189,6 +189,9 @@ OTP_RESEND_COOLDOWN_SECONDS = 120  # 2 minutos
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
@@ -290,150 +293,7 @@ UNFOLD = {
         "redirect_after": None,
     },
     "STYLES": [
-        """
-        /* Estilos personalizados para colores de marca CASSE */
-        :root {
-            --casse-primary: #3E5E8A;
-            --casse-accent: #CDDD64;
-            --casse-secondary: #D0D9D7;
-            --casse-support: #8398B3;
-        }
-        
-        /* Pestañas seleccionadas */
-        .unfold-tabs .tab.active,
-        .unfold-tabs .tab[aria-selected="true"],
-        nav[aria-label="Breadcrumb"] a.active,
-        .breadcrumb-item.active {
-            color: var(--casse-accent) !important;
-            border-bottom-color: var(--casse-accent) !important;
-        }
-        
-        /* Botones primarios */
-        .button,
-        input[type="submit"],
-        .submit-row input[type="submit"],
-        .submit-row input[type="submit"].default,
-        button[type="submit"],
-        .btn-primary,
-        .button-primary {
-            background-color: var(--casse-accent) !important;
-            border-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        .button:hover,
-        input[type="submit"]:hover,
-        .submit-row input[type="submit"]:hover,
-        .submit-row input[type="submit"].default:hover,
-        button[type="submit"]:hover,
-        .btn-primary:hover,
-        .button-primary:hover {
-            background-color: #b8c95a !important;
-            border-color: #b8c95a !important;
-        }
-        
-        /* Enlaces activos y hover */
-        a:active,
-        a:hover,
-        .object-tools a:hover,
-        .object-tools a:focus {
-            color: var(--casse-accent) !important;
-        }
-        
-        /* Checkboxes y radio buttons seleccionados */
-        input[type="checkbox"]:checked,
-        input[type="radio"]:checked {
-            accent-color: var(--casse-accent) !important;
-        }
-        
-        /* Elementos de navegación activos */
-        .sidebar-menu li.active > a,
-        .sidebar-menu li.active > a:hover,
-        .sidebar-menu a.active {
-            background-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        /* Badges y etiquetas */
-        .badge,
-        .tag,
-        .status-tag {
-            background-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        /* Mensajes de éxito */
-        .messagelist .success,
-        .alert-success {
-            background-color: var(--casse-accent) !important;
-            border-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        /* Focus states */
-        input:focus,
-        select:focus,
-        textarea:focus,
-        button:focus,
-        a:focus {
-            outline-color: var(--casse-accent) !important;
-            box-shadow: 0 0 0 2px rgba(205, 221, 100, 0.3) !important;
-        }
-        
-        /* Botones de acción */
-        .object-tools a,
-        .addlink,
-        .changelink,
-        .deletelink {
-            background-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        .object-tools a:hover,
-        .addlink:hover,
-        .changelink:hover {
-            background-color: #b8c95a !important;
-        }
-        
-        /* Selectores y dropdowns activos */
-        select:focus,
-        .select2-container--default .select2-selection--single:focus,
-        .select2-container--default.select2-container--focus .select2-selection--single {
-            border-color: var(--casse-accent) !important;
-        }
-        
-        /* Progress bars */
-        .progress-bar,
-        .progress-bar-fill {
-            background-color: var(--casse-accent) !important;
-        }
-        
-        /* Tooltips */
-        .tooltip {
-            background-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        /* Calendario - día seleccionado */
-        .calendar td.selected a,
-        .calendar td.selected a:hover {
-            background-color: var(--casse-accent) !important;
-            color: #1a1a1a !important;
-        }
-        
-        /* Filtros activos */
-        .changelist-filters li.selected a,
-        .changelist-filters li.selected a:hover {
-            color: var(--casse-accent) !important;
-            border-left-color: var(--casse-accent) !important;
-        }
-        
-        /* Iconos de acción */
-        .action-checkbox:checked + label::before {
-            background-color: var(--casse-accent) !important;
-            border-color: var(--casse-accent) !important;
-        }
-        """
+        "css/casse-admin.css",
     ],
     "SCRIPTS": [],
     "COLORS": {
