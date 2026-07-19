@@ -1,0 +1,62 @@
+[
+  {
+    "ui_code": "TERRITORIO_NACIONAL",
+    "ui_label": "Territorio Nacional",
+    "siebel_value": "Territorio Nacional"
+  },
+  {
+    "ui_code": "SUDAMERICA",
+    "ui_label": "Sudamérica",
+    "siebel_value": "América del Sur (salvo Vzla)"
+  },
+  {
+    "ui_code": "CENTROAMERICA_CARIBE",
+    "ui_label": "Centroamérica y Caribe",
+    "siebel_value": "Centro america/Caribe"
+  },
+  {
+    "ui_code": "EUROPA",
+    "ui_label": "Europa",
+    "siebel_value": "Europa"
+  },
+  {
+    "ui_code": "NORTEAMERICA",
+    "ui_label": "Norteamérica",
+    "siebel_value": "America del norte"
+  },
+  {
+    "ui_code": "ASIA",
+    "ui_label": "Asia",
+    "siebel_value": "Asia"
+  },
+  {
+    "ui_code": "OCEANIA",
+    "ui_label": "Oceanía",
+    "siebel_value": "Oceanía"
+  },
+  {
+    "ui_code": "AFRICA",
+    "ui_label": "África",
+    "siebel_value": "Africa"
+  },
+  {
+    "ui_code": "MUNDO",
+    "ui_label": "Internacional Mundo",
+    "siebel_value": "Internacional Mundo"
+  },
+  {
+    "ui_code": "BRASIL",
+    "ui_label": "Brasil",
+    "siebel_value": "Brasil"
+  },
+  {
+    "ui_code": "VENEZUELA",
+    "ui_label": "Venezuela",
+    "siebel_value": "Venezuela"
+  },
+  {
+    "ui_code": "CUBA",
+    "ui_label": "Cuba",
+    "siebel_value": "Cuba"
+  }
+]

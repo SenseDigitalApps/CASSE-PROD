@@ -1,0 +1,885 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:xsdLocal1="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Request"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:xsdLocal3="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Request"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsdLocal4="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Response"
+ xmlns:xsdLocal2="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Response"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://siebel.com/CustomUI"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:import
+ namespace="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Response"
+></xsd:import
+><xsd:import
+ namespace="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Request"
+></xsd:import
+><xsd:import
+ namespace="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Response"
+></xsd:import
+><xsd:import
+ namespace="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Request"
+></xsd:import
+><xsd:element
+ name="Alta_Voucher_Operation_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal1:UAAltaVoucheMinRequest"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="Alta_Voucher_Operation_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal2:UAAltaVoucheMinResponse"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="Consulta_Voucher_Operation_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal3:UAConsultaVoucherRequest"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="Consulta_Voucher_Operation_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal4:UAConsultaVoucherResponse"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="Anula_Voucher_Operation_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="AgenciaAnulacion"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroVoucherSiebelAnulacion"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="Anula_Voucher_Operation_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="ErrorCodeAnulacion"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ErrorMsgAnulacion"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+></xsd:schema
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ xmlns:xsdLocal1="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Request"
+ targetNamespace="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Request"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="UAAltaVoucheMinRequest"
+ type="xsdLocal1:UAAltaVoucheMinRequest"
+></xsd:element
+><xsd:complexType
+ name="UAAltaVoucheMinRequestTopElmt"
+><xsd:sequence
+><xsd:element
+ name="UAAltaVoucheMinRequest"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal1:UAAltaVoucheMinRequest"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UAAltaVoucheMinRequest"
+><xsd:sequence
+><xsd:element
+ name="DatosVoucher"
+ maxOccurs="unbounded"
+ minOccurs="1"
+ type="xsdLocal1:DatosVoucher"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosVoucher"
+><xsd:sequence
+><xsd:element
+ name="CiaSeguro"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Descuento"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Cuotas"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Vendedor"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TipoVenta"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrecioEmision"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrecioBruto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Precio"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroTelContactoVoucher"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroControl"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NombreContactoVoucher"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="MotivoVoucher"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="MonedaLista"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Linea"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="IndicadorGrupal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FechaVigencia"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FechaFinal"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FechaEmision"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Facturacion"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="EstadoVoucher"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Destino"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Canal"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AplicaComisionFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UASponsor"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="EnvioVoucherMail"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Contrato"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PostProcesoFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DatosSolicitante"
+ maxOccurs="unbounded"
+ minOccurs="1"
+ type="xsdLocal1:DatosSolicitante"
+></xsd:element
+><xsd:element
+ name="DatosProducto"
+ maxOccurs="unbounded"
+ minOccurs="1"
+ type="xsdLocal1:DatosProducto"
+></xsd:element
+><xsd:element
+ name="DatosAgencia"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal1:DatosAgencia"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosSolicitante"
+><xsd:sequence
+><xsd:element
+ name="NroPolizaSeguro"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ValorClienteSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TituloCortesiaSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TipoDocumentoSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="SexoSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PaisResidenciaSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroTelParticularSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroTelLaboralSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroTelContactoSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroTelCelularSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroDocumentoSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroAfiliadoSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NombreSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NombreContactoSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="IndicadorCoordinadorSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FechaNacimientoSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CorreoElectronicoSolicitante"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ApellidoSolicitante"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Parentesco"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PersonUId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DatosDomicilioSolicitante"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:DatosDomicilioSolicitante"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosProducto"
+><xsd:sequence
+><xsd:element
+ name="NroPreCompra"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NombreProducto"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosAgencia"
+><xsd:sequence
+><xsd:element
+ name="OrganizacionRegistradora"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosDomicilioSolicitante"
+><xsd:sequence
+><xsd:element
+ name="ProvEstado"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Pais"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DomicilioParticular"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CodigoPostal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Ciudad"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Response"
+ xmlns:xsdLocal4="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Response"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="UAConsultaVoucherResponse"
+ type="xsdLocal4:UAConsultaVoucherResponse"
+></xsd:element
+><xsd:complexType
+ name="UAConsultaVoucherResponseTopElmt"
+><xsd:sequence
+><xsd:element
+ name="UAConsultaVoucherResponse"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal4:UAConsultaVoucherResponse"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UAConsultaVoucherResponse"
+><xsd:sequence
+><xsd:element
+ name="ConsDatosVoucherRes"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal4:ConsDatosVoucherRes"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ConsDatosVoucherRes"
+><xsd:sequence
+><xsd:element
+ name="NroVoucherConsulta"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroControlExtConsulta"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ErrMsgCons"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ErrCodeCons"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Request"
+ xmlns:xsdLocal3="http://www.siebel.com/xml/UA%20Consulta%20Voucher%20Request"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="UAConsultaVoucherRequest"
+ type="xsdLocal3:UAConsultaVoucherRequest"
+></xsd:element
+><xsd:complexType
+ name="UAConsultaVoucherRequestTopElmt"
+><xsd:sequence
+><xsd:element
+ name="UAConsultaVoucherRequest"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal3:UAConsultaVoucherRequest"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UAConsultaVoucherRequest"
+><xsd:sequence
+><xsd:element
+ name="ConsultaDatosVoucherReq"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal3:ConsultaDatosVoucherReq"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ConsultaDatosVoucherReq"
+><xsd:sequence
+><xsd:element
+ name="OrganizacionRegistradoraConsulta"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroControlConsulta"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Response"
+ xmlns:xsdLocal2="http://www.siebel.com/xml/UA%20Alta%20Vouche%20Min%20Response"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="UAAltaVoucheMinResponse"
+ type="xsdLocal2:UAAltaVoucheMinResponse"
+></xsd:element
+><xsd:complexType
+ name="UAAltaVoucheMinResponseTopElmt"
+><xsd:sequence
+><xsd:element
+ name="UAAltaVoucheMinResponse"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal2:UAAltaVoucheMinResponse"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UAAltaVoucheMinResponse"
+><xsd:sequence
+><xsd:element
+ name="DatosVoucherResp"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal2:DatosVoucherResp"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="DatosVoucherResp"
+><xsd:sequence
+><xsd:element
+ name="NroVoucher"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="NroControlExt"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ErrorMsg"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ErrorCode"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+></types
+><message
+ name="Alta_Voucher_Operation_Input"
+><part
+ name="Alta_Voucher_Operation_Input"
+ element="tns:Alta_Voucher_Operation_Input"
+></part
+></message
+><message
+ name="Alta_Voucher_Operation_Output"
+><part
+ name="Alta_Voucher_Operation_Output"
+ element="tns:Alta_Voucher_Operation_Output"
+></part
+></message
+><message
+ name="Consulta_Voucher_Operation_Input"
+><part
+ name="Consulta_Voucher_Operation_Input"
+ element="tns:Consulta_Voucher_Operation_Input"
+></part
+></message
+><message
+ name="Consulta_Voucher_Operation_Output"
+><part
+ name="Consulta_Voucher_Operation_Output"
+ element="tns:Consulta_Voucher_Operation_Output"
+></part
+></message
+><message
+ name="Anula_Voucher_Operation_Input"
+><part
+ name="Anula_Voucher_Operation_Input"
+ element="tns:Anula_Voucher_Operation_Input"
+></part
+></message
+><message
+ name="Anula_Voucher_Operation_Output"
+><part
+ name="Anula_Voucher_Operation_Output"
+ element="tns:Anula_Voucher_Operation_Output"
+></part
+></message
+><portType
+ name="Alta_Voucher_Port"
+><operation
+ name="Alta_Voucher_Operation"
+><input
+ message="tns:Alta_Voucher_Operation_Input"
+></input
+><output
+ message="tns:Alta_Voucher_Operation_Output"
+></output
+></operation
+></portType
+><portType
+ name="Consulta_Voucher_Port"
+><operation
+ name="Consulta_Voucher_Operation"
+><input
+ message="tns:Consulta_Voucher_Operation_Input"
+></input
+><output
+ message="tns:Consulta_Voucher_Operation_Output"
+></output
+></operation
+></portType
+><portType
+ name="Anula_Voucher_Port"
+><operation
+ name="Anula_Voucher_Operation"
+><input
+ message="tns:Anula_Voucher_Operation_Input"
+></input
+><output
+ message="tns:Anula_Voucher_Operation_Output"
+></output
+></operation
+></portType
+><binding
+ name="Alta_Voucher_Port"
+ type="tns:Alta_Voucher_Port"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="document"
+></soap:binding
+><operation
+ name="Alta_Voucher_Operation"
+><soap:operation
+ soapAction="document/http://siebel.com/CustomUI:Alta_Voucher_Operation"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><binding
+ name="Consulta_Voucher_Port"
+ type="tns:Consulta_Voucher_Port"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="document"
+></soap:binding
+><operation
+ name="Consulta_Voucher_Operation"
+><soap:operation
+ soapAction="document/http://siebel.com/CustomUI:Consulta_Voucher_Operation"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><binding
+ name="Anula_Voucher_Port"
+ type="tns:Anula_Voucher_Port"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="document"
+></soap:binding
+><operation
+ name="Anula_Voucher_Operation"
+><soap:operation
+ soapAction="document/http://siebel.com/CustomUI:Anula_Voucher_Operation"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="UA_spcOperaciones_spcVoucher_spcWS"
+><port
+ binding="tns:Alta_Voucher_Port"
+ name="Alta_Voucher_Port"
+><soap:address
+ location="http://&lt;webserver&gt;/eai_anon_&lt;lang&gt;/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+><port
+ binding="tns:Consulta_Voucher_Port"
+ name="Consulta_Voucher_Port"
+><soap:address
+ location="http://&lt;webserver&gt;/eai_anon_&lt;lang&gt;/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+><port
+ binding="tns:Anula_Voucher_Port"
+ name="Anula_Voucher_Port"
+><soap:address
+ location="http://&lt;webserver&gt;/eai_anon_&lt;lang&gt;/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+></service
+></definitions
+>

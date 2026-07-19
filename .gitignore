@@ -122,3 +122,5 @@ CASSE-iBroker.postman_collection.json
 #Local
 *.md
 *.postman_collection.json
+# Generated / runtime uploads
+BACKEND/media/

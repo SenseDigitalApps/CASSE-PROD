@@ -1,0 +1,1738 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:xsdLocal1="http://www.siebel.com/xml/Lead%20IO"
+ targetNamespace="http://siebel.com/marketing/leads"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://siebel.com/marketing/leads"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ xmlns:xsdLocal1="http://www.siebel.com/xml/Lead%20IO"
+ targetNamespace="http://www.siebel.com/xml/Lead%20IO"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="ListOfLeadIo"
+ type="xsdLocal1:ListOfLeadIo"
+></xsd:element
+><xsd:complexType
+ name="ListOfLeadIoTopElmt"
+><xsd:sequence
+><xsd:element
+ name="ListOfLeadIo"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal1:ListOfLeadIo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfLeadIo"
+><xsd:sequence
+><xsd:element
+ name="Lead"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:Lead"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="Lead"
+><xsd:sequence
+><xsd:element
+ name="Id"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Created"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CreatedBy"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Updated"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UpdatedBy"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ConflictId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ModId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Account"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AccountEmailAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AccountFax"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AccountId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AccountStreetAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="AssignedToPositionId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CAMP_CON_ID"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CampaignCode"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CampaignName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Complexity"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactEmailAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactFax"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactFirstName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactLastName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactMobilePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ContactWorkPhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CreatedByName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DateConverted"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DateDivisionAssigned"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DateOrgAssigned"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DatePositionAssigned"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DateRejected"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DateRetired"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Description"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DivisionName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DivisionOwner"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FollowupDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ImportJobId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadID"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadNum"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadScore"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadStatus"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadsPartner"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Numberoftimesrejected"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="OfferNumber"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Outcome"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Owner"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryAccountAddressId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryContactAddressId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryOpportunityId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryOrganization"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryOrganizationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryOrganizationName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryPartnerId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryProductId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryProspectAddressId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectEmailAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectFax"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectFirstName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectLastName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectMobilePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectStreetAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProspectWorkPhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Quality"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReassignFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RejectComment"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RejectReasonCode"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RejectedByUserId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RescoreFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RetireComment"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RetireReasonCode"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="SourceId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="SourceName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TreatmentCode"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TreatmentId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TreatmentName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TreatmentType"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACantCotizaciones"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACantPasajeros"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAConvenio"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAConvenioId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADestinoViaje"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADetalle"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax1"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax10"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax2"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax3"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax4"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax5"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax6"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax7"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax8"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax9"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAHorarioContacto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAOrigenLead"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAOrigenViaje"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAPackFamiliarFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UARegresoViaje"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UASalidaViaje"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UASubOrigenLead"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATipoViaje"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAOrganizationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProducto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADescuentodiscrecional"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAAsesorApellido"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAAsesorNombre"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACalcHomePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAClienteConvenio"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAClienteConvenioId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAContactHomePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAConvenioOKCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizMonedaLista"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizMonedaLocal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizPrecioBruto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizPrecioBrutoLocal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizPrecioEmision"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizPrecioEmisionLocal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizPrecioUnitario"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACotizTipoCambio"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADatosViajesCargadosCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADocProspectoROFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax10OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax2OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax3OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax4OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax5OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax6OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax7OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax8OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadPax9OK"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEdadesPaxCargadasCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEstadoConvenio"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAEstadoConvertidoCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAHabilitaAceptarLeadCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAHabilitaCotizarCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAHabilitaLiberarLeadCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAHabilitaRetirarLeadCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UALimiteDescuento"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UANroDocProspecto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAPredefaultLeadStatusCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAPrimOrgAddressId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAPrimOrgCountry"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAPrimaryEmployeeId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectHomePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectoROFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATLMKEmailContacto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATLMKEmailContactoCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATLMKPerfilComunicaciones"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATLMKTelefonoContacto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATLMKTelefonoContactoCalc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATipoDocProspecto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UATipodeConvenio"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UADetalleSubOrigen"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAFolletoFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UANroAfiliadoProspecto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UACityProspecto"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ListOfLead_Organization"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal1:ListOfLead_Organization"
+></xsd:element
+><xsd:element
+ name="ListOfLead_Position"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal1:ListOfLead_Position"
+></xsd:element
+><xsd:element
+ name="ListOfLead_Product"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal1:ListOfLead_Product"
+></xsd:element
+><xsd:element
+ name="ListOfLead_Prospect"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal1:ListOfLead_Prospect"
+></xsd:element
+></xsd:sequence
+><xsd:attribute
+ name="Operation"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Searchspec"
+ type="xsd:string"
+></xsd:attribute
+></xsd:complexType
+><xsd:complexType
+ name="ListOfLead_Organization"
+><xsd:sequence
+><xsd:element
+ name="Lead_Organization"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:Lead_Organization"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="Lead_Organization"
+><xsd:sequence
+><xsd:element
+ name="Organization"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="OrganizationId"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="IntegrationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Location"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+><xsd:attribute
+ name="IsPrimaryMVG"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Operation"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Searchspec"
+ type="xsd:string"
+></xsd:attribute
+></xsd:complexType
+><xsd:complexType
+ name="ListOfLead_Position"
+><xsd:sequence
+><xsd:element
+ name="Lead_Position"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:Lead_Position"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="Lead_Position"
+><xsd:sequence
+><xsd:element
+ name="Position"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PositionId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="SalesRep"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DivisionIntegrationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Division"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DivisionLocation"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="DivisionBU"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+><xsd:attribute
+ name="IsPrimaryMVG"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Operation"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Searchspec"
+ type="xsd:string"
+></xsd:attribute
+></xsd:complexType
+><xsd:complexType
+ name="ListOfLead_Product"
+><xsd:sequence
+><xsd:element
+ name="Lead_Product"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:Lead_Product"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="Lead_Product"
+><xsd:sequence
+><xsd:element
+ name="Product"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProductId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ProductInterest"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Part"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="IntegrationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PrimaryOrganization2"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="VendorIntegrationId"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+><xsd:attribute
+ name="IsPrimaryMVG"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Operation"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Searchspec"
+ type="xsd:string"
+></xsd:attribute
+></xsd:complexType
+><xsd:complexType
+ name="ListOfLead_Prospect"
+><xsd:sequence
+><xsd:element
+ name="Lead_Prospect"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal1:Lead_Prospect"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="Lead_Prospect"
+><xsd:sequence
+><xsd:element
+ name="Searchspec2"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectEmailAddress"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectFirstName"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectLastName"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectMobilePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectHomePhone"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAProspectiveContactUID"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+><xsd:attribute
+ name="IsPrimaryMVG"
+ type="xsd:string"
+></xsd:attribute
+><xsd:attribute
+ name="Operation"
+ type="xsd:string"
+></xsd:attribute
+></xsd:complexType
+></xsd:schema
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://siebel.com/marketing/leads"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:import
+ namespace="http://www.siebel.com/xml/Lead%20IO"
+></xsd:import
+><xsd:element
+ name="LeadServiceCreateLead_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal1:ListOfLeadIo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceCreateLead_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Error_spcMessage"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Lead_spcId"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Success_spcFlag"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceRejectLead_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Comments"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="OwnerId"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReasonCode"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadId"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceRejectLead_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="ReturnVal"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceResponseToLead_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Response_spcId"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceResponseToLead_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Error_spcMessage"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Lead_spcId"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Success_spcFlag"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceRetireLead_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Comments"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReasonCode"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="LeadId"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceRetireLead_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="ReturnVal"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceConvertLeadToOpty_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Account_spcId"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Contact_spcId"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Lead_spcId"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceConvertLeadToOpty_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Error_spcMessage"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Opty_spcId"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Success_spcFlag"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceUpdateLead_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ ref="xsdLocal1:ListOfLeadIo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="LeadServiceUpdateLead_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Error_spcMessage"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Success_spcFlag"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+></xsd:schema
+></types
+><message
+ name="LeadServiceCreateLead_Input"
+><part
+ name="LeadServiceCreateLead_Input"
+ element="tns:LeadServiceCreateLead_Input"
+></part
+></message
+><message
+ name="LeadServiceCreateLead_Output"
+><part
+ name="LeadServiceCreateLead_Output"
+ element="tns:LeadServiceCreateLead_Output"
+></part
+></message
+><message
+ name="LeadServiceRejectLead_Input"
+><part
+ name="LeadServiceRejectLead_Input"
+ element="tns:LeadServiceRejectLead_Input"
+></part
+></message
+><message
+ name="LeadServiceRejectLead_Output"
+><part
+ name="LeadServiceRejectLead_Output"
+ element="tns:LeadServiceRejectLead_Output"
+></part
+></message
+><message
+ name="LeadServiceResponseToLead_Input"
+><part
+ name="LeadServiceResponseToLead_Input"
+ element="tns:LeadServiceResponseToLead_Input"
+></part
+></message
+><message
+ name="LeadServiceResponseToLead_Output"
+><part
+ name="LeadServiceResponseToLead_Output"
+ element="tns:LeadServiceResponseToLead_Output"
+></part
+></message
+><message
+ name="LeadServiceRetireLead_Input"
+><part
+ name="LeadServiceRetireLead_Input"
+ element="tns:LeadServiceRetireLead_Input"
+></part
+></message
+><message
+ name="LeadServiceRetireLead_Output"
+><part
+ name="LeadServiceRetireLead_Output"
+ element="tns:LeadServiceRetireLead_Output"
+></part
+></message
+><message
+ name="LeadServiceConvertLeadToOpty_Input"
+><part
+ name="LeadServiceConvertLeadToOpty_Input"
+ element="tns:LeadServiceConvertLeadToOpty_Input"
+></part
+></message
+><message
+ name="LeadServiceConvertLeadToOpty_Output"
+><part
+ name="LeadServiceConvertLeadToOpty_Output"
+ element="tns:LeadServiceConvertLeadToOpty_Output"
+></part
+></message
+><message
+ name="LeadServiceUpdateLead_Input"
+><part
+ name="LeadServiceUpdateLead_Input"
+ element="tns:LeadServiceUpdateLead_Input"
+></part
+></message
+><message
+ name="LeadServiceUpdateLead_Output"
+><part
+ name="LeadServiceUpdateLead_Output"
+ element="tns:LeadServiceUpdateLead_Output"
+></part
+></message
+><portType
+ name="Lead_spcService"
+><operation
+ name="LeadServiceCreateLead"
+><input
+ message="tns:LeadServiceCreateLead_Input"
+></input
+><output
+ message="tns:LeadServiceCreateLead_Output"
+></output
+></operation
+><operation
+ name="LeadServiceRejectLead"
+><input
+ message="tns:LeadServiceRejectLead_Input"
+></input
+><output
+ message="tns:LeadServiceRejectLead_Output"
+></output
+></operation
+><operation
+ name="LeadServiceResponseToLead"
+><input
+ message="tns:LeadServiceResponseToLead_Input"
+></input
+><output
+ message="tns:LeadServiceResponseToLead_Output"
+></output
+></operation
+><operation
+ name="LeadServiceRetireLead"
+><input
+ message="tns:LeadServiceRetireLead_Input"
+></input
+><output
+ message="tns:LeadServiceRetireLead_Output"
+></output
+></operation
+><operation
+ name="LeadServiceConvertLeadToOpty"
+><input
+ message="tns:LeadServiceConvertLeadToOpty_Input"
+></input
+><output
+ message="tns:LeadServiceConvertLeadToOpty_Output"
+></output
+></operation
+><operation
+ name="LeadServiceUpdateLead"
+><input
+ message="tns:LeadServiceUpdateLead_Input"
+></input
+><output
+ message="tns:LeadServiceUpdateLead_Output"
+></output
+></operation
+></portType
+><binding
+ name="Lead_spcService"
+ type="tns:Lead_spcService"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="document"
+></soap:binding
+><operation
+ name="LeadServiceCreateLead"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceCreateLead"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+><operation
+ name="LeadServiceRejectLead"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceRejectLead"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+><operation
+ name="LeadServiceResponseToLead"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceResponseToLead"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+><operation
+ name="LeadServiceRetireLead"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceRetireLead"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+><operation
+ name="LeadServiceConvertLeadToOpty"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceConvertLeadToOpty"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+><operation
+ name="LeadServiceUpdateLead"
+><soap:operation
+ soapAction="document/http://siebel.com/marketing/leads:LeadServiceUpdateLead"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="Lead_spcService"
+><port
+ binding="tns:Lead_spcService"
+ name="Lead_spcService"
+><soap:address
+ location="http://&lt;webserver&gt;/eai_anon_&lt;lang&gt;/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+></service
+></definitions
+>

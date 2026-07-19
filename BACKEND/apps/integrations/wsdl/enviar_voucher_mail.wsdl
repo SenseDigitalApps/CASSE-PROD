@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://siebel.com/CustomUI"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:element
+ name="EnviarVoucherPorMail_Input"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="NroVoucher"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Tarifa"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Mail"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+><xsd:element
+ name="EnviarVoucherPorMail_Output"
+><xsd:complexType
+><xsd:sequence
+><xsd:element
+ name="Error_spcCode"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Error_spcMessage"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:element
+></xsd:schema
+></types
+><message
+ name="EnviarVoucherPorMail_Input"
+><part
+ name="EnviarVoucherPorMail_Input"
+ element="tns:EnviarVoucherPorMail_Input"
+></part
+></message
+><message
+ name="EnviarVoucherPorMail_Output"
+><part
+ name="EnviarVoucherPorMail_Output"
+ element="tns:EnviarVoucherPorMail_Output"
+></part
+></message
+><portType
+ name="UA_spcEnviar_spcVoucher_spcMail_spcWF"
+><operation
+ name="EnviarVoucherPorMail"
+><input
+ message="tns:EnviarVoucherPorMail_Input"
+></input
+><output
+ message="tns:EnviarVoucherPorMail_Output"
+></output
+></operation
+></portType
+><binding
+ name="UA_spcEnviar_spcVoucher_spcMail_spcWF"
+ type="tns:UA_spcEnviar_spcVoucher_spcMail_spcWF"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="document"
+></soap:binding
+><operation
+ name="EnviarVoucherPorMail"
+><soap:operation
+ soapAction="document/http://siebel.com/CustomUI:EnviarVoucherPorMail"
+></soap:operation
+><input
+><soap:body
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="UA_spcEnviar_spcVoucher_spcMail_spcWF"
+><port
+ binding="tns:UA_spcEnviar_spcVoucher_spcMail_spcWF"
+ name="UA_spcEnviar_spcVoucher_spcMail_spcWF"
+><soap:address
+ location="http://siebelqa.ua.com.ar:7800/eai_anon_esn/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+></service
+></definitions
+>

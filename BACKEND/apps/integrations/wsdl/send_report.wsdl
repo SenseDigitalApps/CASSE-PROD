@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/UA%20Send%20Report%20IO"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://siebel.com/CustomUI"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/UA%20Send%20Report%20IO"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/UA%20Send%20Report%20IO"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="ListOfUaSendReportIo"
+ type="xsdLocal0:ListOfUaSendReportIo"
+></xsd:element
+><xsd:complexType
+ name="ListOfUaSendReportIoTopElmt"
+><xsd:sequence
+><xsd:element
+ name="ListOfUaSendReportIo"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal0:ListOfUaSendReportIo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfUaSendReportIo"
+><xsd:sequence
+><xsd:element
+ name="UaVoucherBc"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:UaVoucherBc"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UaVoucherBc"
+><xsd:sequence
+><xsd:element
+ name="Id"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Organization"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PolicyNumber"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="UAVoucherProcesadoFlag"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ListOfUaImpresionSimplificadaBc"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal0:ListOfUaImpresionSimplificadaBc"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfUaImpresionSimplificadaBc"
+><xsd:sequence
+><xsd:element
+ name="UaImpresionSimplificadaBc"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:UaImpresionSimplificadaBc"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="UaImpresionSimplificadaBc"
+><xsd:sequence
+><xsd:element
+ name="ReportOutputFileAutoUpdFlg"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileDeferFlg"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileDockReqFlg"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileDockStatFlg"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileExt"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ReportOutputFileBuffer"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:base64Binary"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+></types
+><message
+ name="SendReportOper_Input"
+><part
+ name="Language"
+ type="xsd:string"
+></part
+><part
+ name="VoucherNumber"
+ type="xsd:string"
+></part
+><part
+ name="Tarifa"
+ type="xsd:string"
+></part
+><part
+ name="Organization"
+ type="xsd:string"
+></part
+></message
+><message
+ name="SendReportOper_Output"
+><part
+ name="Error_spcCode"
+ type="xsd:string"
+></part
+><part
+ name="Error_spcMessage"
+ type="xsd:string"
+></part
+><part
+ name="SM"
+ type="xsdLocal0:ListOfUaSendReportIoTopElmt"
+></part
+></message
+><portType
+ name="SendReportPort"
+><operation
+ name="SendReportOper"
+><input
+ message="tns:SendReportOper_Input"
+></input
+><output
+ message="tns:SendReportOper_Output"
+></output
+></operation
+></portType
+><binding
+ name="SendReportPort"
+ type="tns:SendReportPort"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="SendReportOper"
+><soap:operation
+ soapAction="rpc/http://siebel.com/CustomUI:SendReportOper"
+></soap:operation
+><input
+><soap:body
+ namespace="http://siebel.com/CustomUI"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://siebel.com/CustomUI"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="UA_spcSendReport_spcWS"
+><port
+ binding="tns:SendReportPort"
+ name="SendReportPort"
+><soap:address
+ location="http://siebeldev.ua.com.ar:7400/eai_anon_esn/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+></service
+></definitions
+>

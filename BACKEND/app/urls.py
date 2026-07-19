@@ -27,6 +27,29 @@ def root_view(request):
                 "me": "/api/v1/users/me/",
                 "list": "/api/v1/users/",
                 "detail": "/api/v1/users/{id}/"
+            },
+            "catalogs": {
+                "index": "/api/v1/catalogs/",
+                "destinations": "/api/v1/catalogs/DESTINATION/",
+                "trip_types": "/api/v1/catalogs/TRIP_TYPE/",
+                "mappings": "/api/v1/catalogs/destinations/mappings/"
+            },
+            "quotes": {
+                "travel_list": "/api/v1/quotes/travel/",
+                "travel_detail": "/api/v1/quotes/travel/{id}/",
+                "travel_requote": "/api/v1/quotes/travel/{id}/requote/",
+                "travel_select": "/api/v1/quotes/travel/{id}/select-product/",
+                "travel_passengers": "/api/v1/quotes/travel/{id}/passengers/"
+            },
+            "payments": {
+                "initiate": "/api/v1/payments/travel-quotes/{quote_id}/initiate/",
+                "detail": "/api/v1/payments/{id}/",
+                "confirm": "/api/v1/payments/{id}/confirm/"
+            },
+            "vouchers": {
+                "issue": "/api/v1/vouchers/issue/",
+                "detail": "/api/v1/vouchers/{id}/",
+                "pdf": "/api/v1/vouchers/{id}/pdf/"
             }
         },
         "documentation": "See API_DOCUMENTATION.md for detailed API documentation"
@@ -38,6 +61,10 @@ urlpatterns = [
     path('api/v1/health/', include('apps.health.urls')),
     path('api/v1/auth/', include('apps.authn.urls')),
     path('api/v1/users/', include('apps.users.urls')),
+    path('api/v1/catalogs/', include('apps.catalogs.urls')),
+    path('api/v1/quotes/', include('apps.quotes.urls')),
+    path('api/v1/payments/', include('apps.payments.urls')),
+    path('api/v1/vouchers/', include('apps.vouchers.urls')),
     #Vista para la autenticación del usuario por medio de JWT
 
     path("auth/", include("apps.authn.urls")),

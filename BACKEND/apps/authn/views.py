@@ -158,16 +158,23 @@ class LoginView(APIView):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             
-            # Enviar email con OTP
-            if not send_otp_email(user, otp_code, purpose='LOGIN'):
+            from django.conf import settings
+
+            email_sent = send_otp_email(user, otp_code, purpose='LOGIN')
+            if not email_sent:
                 logger.error(f"Error al enviar email OTP a {user.email_primary}")
-                # Limpiar OTP si falla el envío
-                cleanup_otp(str(user.id), session_token, purpose='LOGIN')
-                return Response(
-                    {'detail': 'Error al enviar código de verificación por email'},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                if not settings.DEBUG:
+                    cleanup_otp(str(user.id), session_token, purpose='LOGIN')
+                    return Response(
+                        {'detail': 'Error al enviar código de verificación por email'},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    )
+                logger.warning(
+                    'DEBUG login OTP for %s: %s',
+                    user.email_primary,
+                    otp_code,
                 )
-            
+
             # Audit log
             log_audit_event(
                 actor_user=user,
@@ -177,15 +184,21 @@ class LoginView(APIView):
                 metadata={'email': user.email_primary, 'purpose': 'LOGIN'},
                 ip_address=ip_address
             )
-            
-            from django.conf import settings
+
             expires_in = settings.OTP_EXPIRATION_MINUTES * 60
-            
-            return Response({
+
+            response_data = {
                 'session_token': session_token,
                 'expires_in': expires_in,
-                'message': f'Código de verificación enviado a {user.email_primary}. El código expira en {settings.OTP_EXPIRATION_MINUTES} minutos.'
-            }, status=status.HTTP_200_OK)
+                'message': (
+                    f'Código de verificación enviado a {user.email_primary}. '
+                    f'El código expira en {settings.OTP_EXPIRATION_MINUTES} minutos.'
+                ),
+            }
+            if settings.DEBUG:
+                response_data['debug_otp'] = otp_code
+
+            return Response(response_data, status=status.HTTP_200_OK)
             
         except Exception as e:
             logger.error(f"Error en proceso de login OTP para usuario {user.id}: {e}", exc_info=True)

@@ -1,0 +1,16 @@
+Nueva cotización para gestión comercial
+
+Se seleccionó una oferta desde la app. Gestionar pago y emisión fuera de la plataforma.
+
+Consecutivo app: {{ app_reference }}
+Cliente: {{ user.full_name }}
+Email: {{ quote.contact_email|default:user.email_primary }}
+Teléfono: {{ quote.contact_phone|default:user.phone }}
+Aseguradora: {{ insurer_name }} ({{ insurer_reference }})
+Plan: {{ product_name }}
+Valor: {{ currency }} {{ price }}
+Destino: {{ destination }}
+Viaje: {{ start_date }} — {{ end_date }}
+Pasajeros: {{ quote.passenger_count }}
+
+— {{ site_name }}

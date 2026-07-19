@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Cotización recibida</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #14181B; line-height: 1.5;">
+  <h2>Cotización guardada</h2>
+  <p>Hola {{ user.full_name|default:quote.contact_first_name }},</p>
+  <p>
+    Recibimos tu solicitud correctamente. Un ejecutivo de CASSE Seguros se
+    comunicará contigo en las próximas 24 horas hábiles para finalizar la contratación.
+  </p>
+  <ul>
+    <li><strong>Consecutivo app:</strong> {{ app_reference }}</li>
+    <li><strong>Aseguradora:</strong> {{ insurer_name }} ({{ insurer_reference }})</li>
+    <li><strong>Plan:</strong> {{ product_name }}</li>
+    <li><strong>Valor:</strong> {{ currency }} {{ price }}</li>
+    <li><strong>Destino:</strong> {{ destination }}</li>
+    <li><strong>Viaje:</strong> {{ start_date }} — {{ end_date }}</li>
+    <li><strong>Ejecutivo:</strong> {{ commercial_name }} · {{ commercial_title }}</li>
+  </ul>
+  <p>La cotización tiene vigencia de 24 horas.</p>
+  <p>— {{ site_name }}</p>
+</body>
+</html>

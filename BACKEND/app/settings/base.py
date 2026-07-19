@@ -22,6 +22,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-me-in-produc
 DEBUG = os.getenv('DJANGO_DEBUG', 'false').lower() == 'true'
 
 ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+# In DEBUG mode allow phones on any LAN IP without updating .env when Wi‑Fi changes.
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -44,6 +47,11 @@ INSTALLED_APPS = [
     'apps.authn',
     'apps.audit',
     'apps.health',
+    'apps.integrations',
+    'apps.catalogs',
+    'apps.quotes',
+    'apps.payments',
+    'apps.vouchers',
 ]
 
 MIDDLEWARE = [
@@ -184,6 +192,54 @@ OTP_EXPIRATION_MINUTES = 20
 OTP_MAX_ATTEMPTS = 3
 OTP_MAX_RESEND_PER_HOUR = 3
 OTP_RESEND_COOLDOWN_SECONDS = 120  # 2 minutos
+
+# Universal Assistance / Siebel SOAP Integration
+UA_ENV = os.getenv('UA_ENV', 'qa')
+UA_SIEBEL_BASE_URL = os.getenv(
+    'UA_SIEBEL_BASE_URL',
+    'https://siebelqa.universal-assistance.com:8443/siebel/app/eai_anon/esn',
+)
+_base = UA_SIEBEL_BASE_URL.rstrip('/')
+UA_SIEBEL_ENDPOINT_URL = os.getenv(
+    'UA_SIEBEL_ENDPOINT_URL',
+    f'{_base}?SWEExtSource=SecureWebService&SWEExtCmd=Execute'
+    if '?' not in _base else _base,
+)
+UA_SIEBEL_USERNAME = os.getenv('UA_SIEBEL_USERNAME', '')
+UA_SIEBEL_PASSWORD = os.getenv('UA_SIEBEL_PASSWORD', '')
+UA_ORGANIZATION_ID = os.getenv('UA_ORGANIZATION_ID', '')
+UA_CONVENIO_INDIVIDUAL_ID = os.getenv('UA_CONVENIO_INDIVIDUAL_ID', '')
+UA_CONVENIO_CAVIPETROL_ID = os.getenv('UA_CONVENIO_CAVIPETROL_ID', '')
+UA_CHANNEL = os.getenv('UA_CHANNEL', 'Turismo')
+UA_VENDOR_CODE = os.getenv('UA_VENDOR_CODE', 'CASSE-APP')
+UA_DEFAULT_ORIGIN_COUNTRY = os.getenv('UA_DEFAULT_ORIGIN_COUNTRY', 'COLOMBIA')
+UA_SOAP_TIMEOUT = int(os.getenv('UA_SOAP_TIMEOUT', '30'))
+UA_CONTROL_NUMBER_PREFIX = os.getenv('UA_CONTROL_NUMBER_PREFIX', 'CASSE')
+UA_LEAD_RETIRE_REASON_CODE = os.getenv('UA_LEAD_RETIRE_REASON_CODE', 'Venta Online')
+QUOTE_EXPIRATION_HOURS = int(os.getenv('QUOTE_EXPIRATION_HOURS', '24'))
+
+# Commercial assignment (stub until city/turn routing exists)
+COMMERCIAL_DEFAULT_NAME = os.getenv('COMMERCIAL_DEFAULT_NAME', 'Laura Quintero')
+COMMERCIAL_DEFAULT_EMAIL = os.getenv(
+    'COMMERCIAL_DEFAULT_EMAIL',
+    os.getenv('DEFAULT_FROM_EMAIL', 'casse@sensedigital.com.co'),
+)
+COMMERCIAL_DEFAULT_TITLE = os.getenv(
+    'COMMERCIAL_DEFAULT_TITLE',
+    'CASSE Seguros · Cuenta clave',
+)
+ENABLE_IN_APP_TRAVEL_PAYMENTS = os.getenv(
+    'ENABLE_IN_APP_TRAVEL_PAYMENTS',
+    'false',
+).lower() in ('1', 'true', 'yes')
+ENABLE_IN_APP_TRAVEL_VOUCHER_ISSUE = os.getenv(
+    'ENABLE_IN_APP_TRAVEL_VOUCHER_ISSUE',
+    'false',
+).lower() in ('1', 'true', 'yes')
+
+# Media files (voucher PDFs)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/

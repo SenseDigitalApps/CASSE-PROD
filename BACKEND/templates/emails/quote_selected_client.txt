@@ -1,0 +1,17 @@
+Cotización guardada
+
+Hola {{ user.full_name|default:quote.contact_first_name }},
+
+Recibimos tu solicitud correctamente. Un ejecutivo de CASSE Seguros se comunicará contigo en las próximas 24 horas hábiles para finalizar la contratación.
+
+Consecutivo app: {{ app_reference }}
+Aseguradora: {{ insurer_name }} ({{ insurer_reference }})
+Plan: {{ product_name }}
+Valor: {{ currency }} {{ price }}
+Destino: {{ destination }}
+Viaje: {{ start_date }} — {{ end_date }}
+Ejecutivo: {{ commercial_name }} · {{ commercial_title }}
+
+La cotización tiene vigencia de 24 horas.
+
+— {{ site_name }}

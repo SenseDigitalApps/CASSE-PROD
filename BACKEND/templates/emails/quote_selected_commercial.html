@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Nueva cotización seleccionada</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #14181B; line-height: 1.5;">
+  <h2>Nueva cotización para gestión comercial</h2>
+  <p>Se seleccionó una oferta desde la app. Gestionar pago y emisión fuera de la plataforma.</p>
+  <ul>
+    <li><strong>Consecutivo app:</strong> {{ app_reference }}</li>
+    <li><strong>Cliente:</strong> {{ user.full_name }}</li>
+    <li><strong>Email:</strong> {{ quote.contact_email|default:user.email_primary }}</li>
+    <li><strong>Teléfono:</strong> {{ quote.contact_phone|default:user.phone }}</li>
+    <li><strong>Aseguradora:</strong> {{ insurer_name }} ({{ insurer_reference }})</li>
+    <li><strong>Plan:</strong> {{ product_name }}</li>
+    <li><strong>Valor:</strong> {{ currency }} {{ price }}</li>
+    <li><strong>Destino:</strong> {{ destination }}</li>
+    <li><strong>Viaje:</strong> {{ start_date }} — {{ end_date }}</li>
+    <li><strong>Pasajeros:</strong> {{ quote.passenger_count }}</li>
+  </ul>
+  <p>— {{ site_name }}</p>
+</body>
+</html>

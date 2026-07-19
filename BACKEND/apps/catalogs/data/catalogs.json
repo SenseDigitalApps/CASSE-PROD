@@ -1,0 +1,760 @@
+{
+  "DESTINATION": [
+    {
+      "code": "Africa",
+      "label": "Africa"
+    },
+    {
+      "code": "America del norte",
+      "label": "America del norte"
+    },
+    {
+      "code": "América del Sur (salvo Vzla)",
+      "label": "América del Sur (salvo Vzla)"
+    },
+    {
+      "code": "Asia",
+      "label": "Asia"
+    },
+    {
+      "code": "Brasil",
+      "label": "Brasil"
+    },
+    {
+      "code": "Centro america/Caribe",
+      "label": "Centro america/Caribe"
+    },
+    {
+      "code": "Cuba",
+      "label": "Cuba"
+    },
+    {
+      "code": "Europa",
+      "label": "Europa"
+    },
+    {
+      "code": "Internacional Mundo",
+      "label": "Internacional Mundo"
+    },
+    {
+      "code": "Oceanía",
+      "label": "Oceanía"
+    },
+    {
+      "code": "Territorio Nacional",
+      "label": "Territorio Nacional"
+    },
+    {
+      "code": "Venezuela",
+      "label": "Venezuela"
+    }
+  ],
+  "TRIP_TYPE": [
+    {
+      "code": "Un viaje",
+      "label": "Un viaje"
+    },
+    {
+      "code": "Varios viajes",
+      "label": "Varios viajes"
+    }
+  ],
+  "DOCUMENT_TYPE": [
+    {
+      "code": "Pasaporte",
+      "label": "Pasaporte"
+    },
+    {
+      "code": "Otros",
+      "label": "Otros"
+    },
+    {
+      "code": "DNI",
+      "label": "DNI"
+    },
+    {
+      "code": "CI",
+      "label": "CI"
+    },
+    {
+      "code": "LE",
+      "label": "LE"
+    },
+    {
+      "code": "LC",
+      "label": "LC"
+    },
+    {
+      "code": "Documento Extranjero",
+      "label": "Documento Extranjero"
+    },
+    {
+      "code": "RUT",
+      "label": "RUT"
+    },
+    {
+      "code": "CPF",
+      "label": "CPF"
+    },
+    {
+      "code": "RG",
+      "label": "RG"
+    }
+  ],
+  "GENDER": [
+    {
+      "code": "M",
+      "label": "M"
+    },
+    {
+      "code": "F",
+      "label": "F"
+    }
+  ],
+  "SALE_TYPE": [
+    {
+      "code": "Anual",
+      "label": "Anual"
+    },
+    {
+      "code": "Anual con renovacion automatica",
+      "label": "Anual con renovacion automatica"
+    },
+    {
+      "code": "Anual con renovación",
+      "label": "Anual con renovación"
+    },
+    {
+      "code": "Mensual",
+      "label": "Mensual"
+    },
+    {
+      "code": "Módulos",
+      "label": "Módulos"
+    },
+    {
+      "code": "Por días",
+      "label": "Por días"
+    },
+    {
+      "code": "Semanal",
+      "label": "Semanal"
+    }
+  ],
+  "VOUCHER_STATUS": [
+    {
+      "code": "Activo",
+      "label": "Activo"
+    },
+    {
+      "code": "Activo consumo",
+      "label": "Activo consumo"
+    },
+    {
+      "code": "Activo facturación",
+      "label": "Activo facturación"
+    },
+    {
+      "code": "Anulado",
+      "label": "Anulado"
+    },
+    {
+      "code": "Baja",
+      "label": "Baja"
+    },
+    {
+      "code": "Cancelado",
+      "label": "Cancelado"
+    },
+    {
+      "code": "Dudoso",
+      "label": "Dudoso"
+    },
+    {
+      "code": "Estado de observación",
+      "label": "Estado de observación"
+    },
+    {
+      "code": "Estado normal",
+      "label": "Estado normal"
+    },
+    {
+      "code": "Inactivo",
+      "label": "Inactivo"
+    },
+    {
+      "code": "Invertido",
+      "label": "Invertido"
+    },
+    {
+      "code": "Liquidado",
+      "label": "Liquidado"
+    },
+    {
+      "code": "No iniciado",
+      "label": "No iniciado"
+    },
+    {
+      "code": "Pendiente",
+      "label": "Pendiente"
+    },
+    {
+      "code": "PreActivo",
+      "label": "PreActivo"
+    },
+    {
+      "code": "Pérdida",
+      "label": "Pérdida"
+    },
+    {
+      "code": "Rechazado",
+      "label": "Rechazado"
+    },
+    {
+      "code": "Retener",
+      "label": "Retener"
+    },
+    {
+      "code": "Sin iniciar",
+      "label": "Sin iniciar"
+    },
+    {
+      "code": "Subestándar",
+      "label": "Subestándar"
+    },
+    {
+      "code": "Vencido",
+      "label": "Vencido"
+    }
+  ],
+  "PAYMENT_METHOD": [
+    {
+      "code": "Tarjeta Crédito",
+      "label": "Tarjeta Crédito"
+    },
+    {
+      "code": "Tarjeta Débito",
+      "label": "Tarjeta Débito"
+    }
+  ],
+  "COURTESY_TITLE": [
+    {
+      "code": "Sr.",
+      "label": "Sr."
+    },
+    {
+      "code": "Srta.",
+      "label": "Srta."
+    },
+    {
+      "code": "Dra.",
+      "label": "Dra."
+    },
+    {
+      "code": "Sra.",
+      "label": "Sra."
+    },
+    {
+      "code": "Dr.",
+      "label": "Dr."
+    },
+    {
+      "code": "Prof.",
+      "label": "Prof."
+    },
+    {
+      "code": "Prof.",
+      "label": "Prof."
+    }
+  ],
+  "REASON_CODE": [
+    {
+      "code": "Venta Online",
+      "label": "Venta Online"
+    }
+  ],
+  "BILLING": [
+    {
+      "code": "Anulado",
+      "label": "Anulado"
+    },
+    {
+      "code": "Cancelado",
+      "label": "Cancelado"
+    },
+    {
+      "code": "Enviado a Facturación",
+      "label": "Enviado a Facturación"
+    },
+    {
+      "code": "Facturación Cíclica",
+      "label": "Facturación Cíclica"
+    },
+    {
+      "code": "Facturado",
+      "label": "Facturado"
+    },
+    {
+      "code": "No Facturar",
+      "label": "No Facturar"
+    },
+    {
+      "code": "Pagado",
+      "label": "Pagado"
+    },
+    {
+      "code": "Pendiente Facturación",
+      "label": "Pendiente Facturación"
+    },
+    {
+      "code": "Pendiente Post Proceso",
+      "label": "Pendiente Post Proceso"
+    },
+    {
+      "code": "Plazo futuro",
+      "label": "Plazo futuro"
+    },
+    {
+      "code": "Vencimiento pasado",
+      "label": "Vencimiento pasado"
+    }
+  ],
+  "LINE": [
+    {
+      "code": "Hogar",
+      "label": "Hogar"
+    },
+    {
+      "code": "Vehículo",
+      "label": "Vehículo"
+    },
+    {
+      "code": "Salud",
+      "label": "Salud"
+    }
+  ],
+  "VOUCHER_REASON": [
+    {
+      "code": "Activo",
+      "label": "Activo"
+    },
+    {
+      "code": "Cambio de vigencia",
+      "label": "Cambio de vigencia"
+    },
+    {
+      "code": "Cancelado",
+      "label": "Cancelado"
+    },
+    {
+      "code": "Defunción",
+      "label": "Defunción"
+    },
+    {
+      "code": "Disconforme con el precio",
+      "label": "Disconforme con el precio"
+    },
+    {
+      "code": "Disconforme con el servicio",
+      "label": "Disconforme con el servicio"
+    },
+    {
+      "code": "Extensión de voucher",
+      "label": "Extensión de voucher"
+    },
+    {
+      "code": "Grupal",
+      "label": "Grupal"
+    },
+    {
+      "code": "Individual",
+      "label": "Individual"
+    },
+    {
+      "code": "Negación de visa",
+      "label": "Negación de visa"
+    },
+    {
+      "code": "No viaja",
+      "label": "No viaja"
+    },
+    {
+      "code": "Pendiente",
+      "label": "Pendiente"
+    },
+    {
+      "code": "Por Renovación Completa",
+      "label": "Por Renovación Completa"
+    },
+    {
+      "code": "Procesado sin Renovar por Edad",
+      "label": "Procesado sin Renovar por Edad"
+    },
+    {
+      "code": "Product change",
+      "label": "Product change"
+    },
+    {
+      "code": "Product change",
+      "label": "Product change"
+    },
+    {
+      "code": "Rechazado",
+      "label": "Rechazado"
+    },
+    {
+      "code": "Renovación Producto Inactivo",
+      "label": "Renovación Producto Inactivo"
+    },
+    {
+      "code": "Renovado",
+      "label": "Renovado"
+    },
+    {
+      "code": "Activo",
+      "label": "Activo"
+    },
+    {
+      "code": "Cambio de Producto",
+      "label": "Cambio de Producto"
+    },
+    {
+      "code": "Cambio de Producto",
+      "label": "Cambio de Producto"
+    },
+    {
+      "code": "Cambio de vigencia",
+      "label": "Cambio de vigencia"
+    },
+    {
+      "code": "Cancelado",
+      "label": "Cancelado"
+    },
+    {
+      "code": "Defunción",
+      "label": "Defunción"
+    },
+    {
+      "code": "Disconforme con el precio",
+      "label": "Disconforme con el precio"
+    },
+    {
+      "code": "Disconforme con el servicio",
+      "label": "Disconforme con el servicio"
+    },
+    {
+      "code": "Extensión de voucher",
+      "label": "Extensión de voucher"
+    },
+    {
+      "code": "Grupal",
+      "label": "Grupal"
+    },
+    {
+      "code": "Individual",
+      "label": "Individual"
+    },
+    {
+      "code": "Negación de visa",
+      "label": "Negación de visa"
+    },
+    {
+      "code": "No viaja",
+      "label": "No viaja"
+    },
+    {
+      "code": "Pendiente",
+      "label": "Pendiente"
+    },
+    {
+      "code": "Pendiente de Cobro",
+      "label": "Pendiente de Cobro"
+    },
+    {
+      "code": "Por Renovación Completa",
+      "label": "Por Renovación Completa"
+    },
+    {
+      "code": "Por Renovación Pendiente Edad",
+      "label": "Por Renovación Pendiente Edad"
+    },
+    {
+      "code": "Rechazado",
+      "label": "Rechazado"
+    },
+    {
+      "code": "Renovación Producto Inactivo",
+      "label": "Renovación Producto Inactivo"
+    },
+    {
+      "code": "Renovado",
+      "label": "Renovado"
+    }
+  ],
+  "ISSUER": [
+    {
+      "code": "Master",
+      "label": "Master"
+    },
+    {
+      "code": "Visa",
+      "label": "Visa"
+    },
+    {
+      "code": "Cabal",
+      "label": "Cabal"
+    },
+    {
+      "code": "American express",
+      "label": "American express"
+    },
+    {
+      "code": "Tarjeta Naranja",
+      "label": "Tarjeta Naranja"
+    },
+    {
+      "code": "Diners Club",
+      "label": "Diners Club"
+    },
+    {
+      "code": "Pago mis cuentas",
+      "label": "Pago mis cuentas"
+    },
+    {
+      "code": "Visa Electrón",
+      "label": "Visa Electrón"
+    }
+  ],
+  "CURRENCY": [
+    {
+      "code": "AED",
+      "label": "AED"
+    },
+    {
+      "code": "AFN",
+      "label": "AFN"
+    },
+    {
+      "code": "AMD",
+      "label": "AMD"
+    },
+    {
+      "code": "ANG",
+      "label": "ANG"
+    },
+    {
+      "code": "AOA",
+      "label": "AOA"
+    },
+    {
+      "code": "ARS",
+      "label": "ARS"
+    },
+    {
+      "code": "ATS",
+      "label": "ATS"
+    },
+    {
+      "code": "AUD",
+      "label": "AUD"
+    },
+    {
+      "code": "AWG",
+      "label": "AWG"
+    },
+    {
+      "code": "AZN",
+      "label": "AZN"
+    },
+    {
+      "code": "BAM",
+      "label": "BAM"
+    },
+    {
+      "code": "BBD",
+      "label": "BBD"
+    },
+    {
+      "code": "BDT",
+      "label": "BDT"
+    },
+    {
+      "code": "BEF",
+      "label": "BEF"
+    },
+    {
+      "code": "BGN",
+      "label": "BGN"
+    },
+    {
+      "code": "BHD",
+      "label": "BHD"
+    },
+    {
+      "code": "BIF",
+      "label": "BIF"
+    },
+    {
+      "code": "BMD",
+      "label": "BMD"
+    },
+    {
+      "code": "BND",
+      "label": "BND"
+    },
+    {
+      "code": "BOB",
+      "label": "BOB"
+    },
+    {
+      "code": "BRL",
+      "label": "BRL"
+    },
+    {
+      "code": "BSD",
+      "label": "BSD"
+    },
+    {
+      "code": "BTN",
+      "label": "BTN"
+    },
+    {
+      "code": "BWP",
+      "label": "BWP"
+    },
+    {
+      "code": "BYR",
+      "label": "BYR"
+    },
+    {
+      "code": "BZD",
+      "label": "BZD"
+    },
+    {
+      "code": "CAD",
+      "label": "CAD"
+    },
+    {
+      "code": "CDF",
+      "label": "CDF"
+    },
+    {
+      "code": "CHF",
+      "label": "CHF"
+    },
+    {
+      "code": "CLA",
+      "label": "CLA"
+    },
+    {
+      "code": "CLF",
+      "label": "CLF"
+    },
+    {
+      "code": "CLP",
+      "label": "CLP"
+    },
+    {
+      "code": "CNY",
+      "label": "CNY"
+    },
+    {
+      "code": "COP",
+      "label": "COP"
+    },
+    {
+      "code": "CRC",
+      "label": "CRC"
+    },
+    {
+      "code": "CUC",
+      "label": "CUC"
+    },
+    {
+      "code": "CUP",
+      "label": "CUP"
+    },
+    {
+      "code": "CVE",
+      "label": "CVE"
+    },
+    {
+      "code": "CZK",
+      "label": "CZK"
+    },
+    {
+      "code": "DEM",
+      "label": "DEM"
+    },
+    {
+      "code": "DJF",
+      "label": "DJF"
+    },
+    {
+      "code": "DKK",
+      "label": "DKK"
+    },
+    {
+      "code": "DOP",
+      "label": "DOP"
+    },
+    {
+      "code": "DZD",
+      "label": "DZD"
+    },
+    {
+      "code": "EEK",
+      "label": "EEK"
+    },
+    {
+      "code": "EGP",
+      "label": "EGP"
+    },
+    {
+      "code": "ERN",
+      "label": "ERN"
+    },
+    {
+      "code": "ESP",
+      "label": "ESP"
+    },
+    {
+      "code": "ETB",
+      "label": "ETB"
+    },
+    {
+      "code": "EU",
+      "label": "EU"
+    }
+  ],
+  "CHANNEL": [
+    {
+      "code": "Dias",
+      "label": "Dias"
+    },
+    {
+      "code": "Telemarketing",
+      "label": "Telemarketing"
+    },
+    {
+      "code": "Monto",
+      "label": "Monto"
+    },
+    {
+      "code": "Empresas",
+      "label": "Empresas"
+    },
+    {
+      "code": "Turismo",
+      "label": "Turismo"
+    },
+    {
+      "code": "Corporativo",
+      "label": "Corporativo"
+    },
+    {
+      "code": "Corresponsalía",
+      "label": "Corresponsalía"
+    }
+  ]
+}
