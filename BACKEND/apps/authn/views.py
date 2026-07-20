@@ -163,16 +163,10 @@ class LoginView(APIView):
             email_sent = send_otp_email(user, otp_code, purpose='LOGIN')
             if not email_sent:
                 logger.error(f"Error al enviar email OTP a {user.email_primary}")
-                if not settings.DEBUG:
-                    cleanup_otp(str(user.id), session_token, purpose='LOGIN')
-                    return Response(
-                        {'detail': 'Error al enviar código de verificación por email'},
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    )
-                logger.warning(
-                    'DEBUG login OTP for %s: %s',
-                    user.email_primary,
-                    otp_code,
+                cleanup_otp(str(user.id), session_token, purpose='LOGIN')
+                return Response(
+                    {'detail': 'Error al enviar código de verificación por email'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
             # Audit log
@@ -187,18 +181,14 @@ class LoginView(APIView):
 
             expires_in = settings.OTP_EXPIRATION_MINUTES * 60
 
-            response_data = {
+            return Response({
                 'session_token': session_token,
                 'expires_in': expires_in,
                 'message': (
                     f'Código de verificación enviado a {user.email_primary}. '
                     f'El código expira en {settings.OTP_EXPIRATION_MINUTES} minutos.'
                 ),
-            }
-            if settings.DEBUG:
-                response_data['debug_otp'] = otp_code
-
-            return Response(response_data, status=status.HTTP_200_OK)
+            }, status=status.HTTP_200_OK)
             
         except Exception as e:
             logger.error(f"Error en proceso de login OTP para usuario {user.id}: {e}", exc_info=True)
