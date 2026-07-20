@@ -124,3 +124,6 @@ CASSE-iBroker.postman_collection.json
 *.postman_collection.json
 # Generated / runtime uploads
 BACKEND/media/
+
+# Flutter app (vive fuera de este repo / local)
+FRONTEND/
