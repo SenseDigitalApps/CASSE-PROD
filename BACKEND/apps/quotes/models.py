@@ -425,3 +425,212 @@ class AutoQuoteCoverage(models.Model):
 
     def __str__(self):
         return self.visible_name or self.name
+
+
+class HomeQuote(models.Model):
+    """Allianz Hogar Individual 2013 quote session (REST quotatePolicy)."""
+
+    class AffiliateType(models.TextChoices):
+        INDIVIDUAL = 'INDIVIDUAL', 'No asociado'
+        CAVIPETROL = 'CAVIPETROL', 'Asociado Cavipetrol'
+
+    class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Borrador'
+        QUOTED = 'QUOTED', 'Cotizada'
+        EXPIRED = 'EXPIRED', 'Expirada'
+        SELECTED = 'SELECTED', 'Plan seleccionado'
+        ASSIGNED = 'ASSIGNED', 'Asignada a comercial'
+        CONVERTED = 'CONVERTED', 'Convertida'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='home_quotes',
+    )
+    affiliate_type = models.CharField(
+        max_length=16,
+        choices=AffiliateType.choices,
+        default=AffiliateType.INDIVIDUAL,
+    )
+    affiliation_number = models.CharField(max_length=40, blank=True, default='')
+    payment_form = models.CharField(max_length=40, blank=True, default='')
+    paying_company = models.CharField(max_length=120, blank=True, default='')
+    product_code = models.CharField(max_length=8, default='2013')
+    risk_category = models.CharField(max_length=1, default='3')
+    locality_dane_code = models.CharField(max_length=10, default='11001')
+    city_name = models.CharField(max_length=120, blank=True, default='')
+    address = models.CharField(max_length=120)
+    address_extra = models.CharField(max_length=120, blank=True, default='')
+    building_value = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    contents_value = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    theft_value = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    all_risk_value = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    pet_coverage = models.CharField(max_length=4, default='NO')
+    construction_year = models.PositiveSmallIntegerField()
+    total_floors = models.PositiveSmallIntegerField(default=1)
+    apartment_floor = models.PositiveSmallIntegerField(default=1)
+    basements = models.PositiveSmallIntegerField(default=0)
+    area_sqm = models.PositiveIntegerField(default=50)
+    construction_type = models.CharField(max_length=4, default='3')
+    housing_type = models.CharField(max_length=4, default='2')
+    payment_frequency = models.CharField(max_length=1, default='A')
+    holder_doc_type = models.CharField(max_length=4, default='C')
+    holder_doc_number = models.CharField(max_length=32)
+    is_holder_owner = models.BooleanField(default=True)
+    effective_date = models.DateField()
+    term_date = models.DateField()
+    allianz_quotation_number = models.CharField(max_length=64, blank=True, default='')
+    risk_type_desc = models.CharField(max_length=120, blank=True, default='')
+    contact_first_name = models.CharField(max_length=100, blank=True, default='')
+    contact_last_name = models.CharField(max_length=100, blank=True, default='')
+    contact_email = models.EmailField(blank=True, default='')
+    contact_phone = models.CharField(max_length=40, blank=True, default='')
+    status = models.CharField(
+        max_length=16,
+        choices=Status.choices,
+        default=Status.DRAFT,
+        db_index=True,
+    )
+    selected_product = models.ForeignKey(
+        'HomeQuotePackage',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='selected_in_quotes',
+    )
+    app_reference = models.CharField(max_length=32, blank=True, default='', db_index=True)
+    insurer_reference = models.CharField(max_length=64, blank=True, default='')
+    insurer_name = models.CharField(max_length=100, blank=True, default='')
+    assigned_commercial_name = models.CharField(max_length=255, blank=True, default='')
+    assigned_commercial_email = models.EmailField(blank=True, default='')
+    assigned_commercial_title = models.CharField(max_length=120, blank=True, default='')
+    client_notified_at = models.DateTimeField(null=True, blank=True)
+    commercial_notified_at = models.DateTimeField(null=True, blank=True)
+    selected_at = models.DateTimeField(null=True, blank=True)
+    expires_at = models.DateTimeField(db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Cotización de hogar'
+        verbose_name_plural = 'Cotizaciones de hogar'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', 'status']),
+            models.Index(fields=['user', 'expires_at']),
+        ]
+
+    def __str__(self):
+        return f'HomeQuote {self.address[:40]} [{self.status}]'
+
+    @property
+    def is_expired(self) -> bool:
+        return timezone.now() >= self.expires_at
+
+    def mark_expired_if_needed(self) -> bool:
+        if self.is_expired and self.status not in (
+            self.Status.EXPIRED,
+            self.Status.CONVERTED,
+        ):
+            self.status = self.Status.EXPIRED
+            self.save(update_fields=['status', 'updated_at'])
+            return True
+        return False
+
+    @property
+    def display_insurer_name(self) -> str:
+        if self.insurer_name:
+            return self.insurer_name
+        if self.selected_product and self.selected_product.brand:
+            return self.selected_product.brand
+        return 'Allianz'
+
+    @property
+    def destination_siebel(self) -> str:
+        return f'{self.city_name or self.locality_dane_code} · {self.address}'.strip(' ·')
+
+    @property
+    def start_date(self):
+        return self.effective_date
+
+    @property
+    def end_date(self):
+        return self.term_date
+
+    @property
+    def passenger_count(self):
+        return None
+
+    @classmethod
+    def default_expires_at(cls):
+        hours = getattr(settings, 'QUOTE_EXPIRATION_HOURS', 24)
+        return timezone.now() + timedelta(hours=hours)
+
+
+class HomeQuotePackage(models.Model):
+    """Allianz Hogar package option."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    quote = models.ForeignKey(
+        HomeQuote,
+        on_delete=models.CASCADE,
+        related_name='products',
+    )
+    package_id = models.CharField(max_length=32, db_index=True)
+    product_id_siebel = models.CharField(max_length=32, db_index=True)
+    product_name = models.CharField(max_length=200)
+    brand = models.CharField(max_length=100, blank=True, default='Allianz')
+    logo = models.CharField(max_length=100, blank=True, default='allianz')
+    price_emission = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_emission_local = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_gross = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_gross_local = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_unit = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_net = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    price_net_local = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    premium_annual = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    premium_monthly = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    premium_semestral = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    premium_trimestral = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+    currency = models.CharField(max_length=10, blank=True, default='COP')
+    currency_local = models.CharField(max_length=10, blank=True, default='COP')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Paquete hogar cotizado'
+        verbose_name_plural = 'Paquetes hogar cotizados'
+        ordering = ['price_emission_local', 'product_name']
+        indexes = [
+            models.Index(fields=['quote', 'package_id']),
+        ]
+
+    def __str__(self):
+        return self.product_name
+
+
+class HomeQuoteCoverage(models.Model):
+    """Coverage row inside a Hogar package."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    product = models.ForeignKey(
+        HomeQuotePackage,
+        on_delete=models.CASCADE,
+        related_name='attributes',
+    )
+    coverage_id = models.CharField(max_length=32, blank=True, default='')
+    name = models.CharField(max_length=300)
+    visible_name = models.CharField(max_length=300, blank=True, default='')
+    unit = models.CharField(max_length=50, blank=True, default='')
+    value = models.CharField(max_length=200, blank=True, default='')
+    deductible = models.CharField(max_length=64, blank=True, default='')
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Cobertura hogar'
+        verbose_name_plural = 'Coberturas hogar'
+        ordering = ['sort_order', 'name']
+
+    def __str__(self):
+        return self.visible_name or self.name
+

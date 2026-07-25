@@ -5,6 +5,9 @@ from apps.quotes.models import (
     AutoQuote,
     AutoQuoteCoverage,
     AutoQuotePackage,
+    HomeQuote,
+    HomeQuoteCoverage,
+    HomeQuotePackage,
     QuotePassenger,
     QuoteProduct,
     QuoteProductAttribute,
@@ -436,6 +439,217 @@ class AutoQuoteCreateSerializer(serializers.Serializer):
     holder_born_date = serializers.DateField()
     holder_sex = serializers.CharField(required=False, allow_blank=True, default='M')
     is_holder_driver = serializers.BooleanField(required=False, default=True)
+    is_holder_owner = serializers.BooleanField(required=False, default=True)
+    effective_date = serializers.DateField(required=False)
+    term_date = serializers.DateField(required=False)
+    contact_first_name = serializers.CharField(required=False, allow_blank=True)
+    contact_last_name = serializers.CharField(required=False, allow_blank=True)
+    contact_email = serializers.EmailField(required=False, allow_blank=True)
+    contact_phone = serializers.CharField(required=False, allow_blank=True)
+
+
+class HomeQuoteCoverageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeQuoteCoverage
+        fields = ('coverage_id', 'name', 'visible_name', 'unit', 'value', 'deductible')
+
+
+class HomeQuotePackageSerializer(serializers.ModelSerializer):
+    coverage_attributes = HomeQuoteCoverageSerializer(source='attributes', many=True)
+    prices = serializers.SerializerMethodField()
+    payments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = HomeQuotePackage
+        fields = (
+            'id',
+            'package_id',
+            'product_id_siebel',
+            'product_name',
+            'brand',
+            'logo',
+            'prices',
+            'payments',
+            'coverage_attributes',
+        )
+
+    def get_prices(self, obj: HomeQuotePackage) -> dict:
+        return {
+            'emission': obj.price_emission,
+            'emission_local': obj.price_emission_local,
+            'gross': obj.price_gross,
+            'gross_local': obj.price_gross_local,
+            'unit': obj.price_unit,
+            'net': obj.price_net,
+            'net_local': obj.price_net_local,
+            'currency': obj.currency,
+            'currency_local': obj.currency_local,
+        }
+
+    def get_payments(self, obj: HomeQuotePackage) -> dict:
+        return {
+            'annual': obj.premium_annual,
+            'monthly': obj.premium_monthly,
+            'semestral': obj.premium_semestral,
+            'trimestral': obj.premium_trimestral,
+        }
+
+
+class HomeQuoteListSerializer(serializers.ModelSerializer):
+    products_count = serializers.SerializerMethodField()
+    is_expired = serializers.BooleanField(read_only=True)
+    selected_product_id = serializers.UUIDField(
+        source='selected_product.id',
+        read_only=True,
+        allow_null=True,
+    )
+    insurer_display = serializers.CharField(source='display_insurer_name', read_only=True)
+
+    class Meta:
+        model = HomeQuote
+        fields = (
+            'id',
+            'status',
+            'affiliate_type',
+            'affiliation_number',
+            'risk_category',
+            'city_name',
+            'address',
+            'building_value',
+            'contents_value',
+            'allianz_quotation_number',
+            'products_count',
+            'selected_product_id',
+            'app_reference',
+            'insurer_reference',
+            'insurer_display',
+            'assigned_commercial_name',
+            'is_expired',
+            'expires_at',
+            'created_at',
+        )
+
+    def get_products_count(self, obj: HomeQuote) -> int:
+        if hasattr(obj, '_prefetched_objects_cache') and 'products' in obj._prefetched_objects_cache:
+            return len(obj.products.all())
+        return obj.products.count()
+
+
+class HomeQuoteDetailSerializer(serializers.ModelSerializer):
+    products = HomeQuotePackageSerializer(many=True, read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    selected_product = HomeQuotePackageSerializer(read_only=True)
+    insurer_display = serializers.CharField(source='display_insurer_name', read_only=True)
+    client_notification_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = HomeQuote
+        fields = (
+            'id',
+            'status',
+            'affiliate_type',
+            'affiliation_number',
+            'payment_form',
+            'paying_company',
+            'product_code',
+            'risk_category',
+            'locality_dane_code',
+            'city_name',
+            'address',
+            'address_extra',
+            'building_value',
+            'contents_value',
+            'theft_value',
+            'all_risk_value',
+            'pet_coverage',
+            'construction_year',
+            'total_floors',
+            'apartment_floor',
+            'basements',
+            'area_sqm',
+            'construction_type',
+            'housing_type',
+            'payment_frequency',
+            'holder_doc_type',
+            'holder_doc_number',
+            'is_holder_owner',
+            'effective_date',
+            'term_date',
+            'allianz_quotation_number',
+            'risk_type_desc',
+            'contact_first_name',
+            'contact_last_name',
+            'contact_email',
+            'contact_phone',
+            'products',
+            'selected_product',
+            'app_reference',
+            'insurer_reference',
+            'insurer_name',
+            'insurer_display',
+            'assigned_commercial_name',
+            'assigned_commercial_email',
+            'assigned_commercial_title',
+            'client_notified_at',
+            'commercial_notified_at',
+            'client_notification_label',
+            'selected_at',
+            'is_expired',
+            'expires_at',
+            'created_at',
+            'updated_at',
+        )
+
+    def get_client_notification_label(self, obj: HomeQuote) -> str:
+        from apps.quotes.services.commercial_assignment import relative_notified_label
+        return relative_notified_label(obj.client_notified_at)
+
+
+class HomeQuoteCreateSerializer(serializers.Serializer):
+    affiliate_type = serializers.ChoiceField(
+        choices=HomeQuote.AffiliateType.choices,
+        default=HomeQuote.AffiliateType.INDIVIDUAL,
+    )
+    affiliation_number = serializers.CharField(required=False, allow_blank=True, default='')
+    payment_form = serializers.CharField(required=False, allow_blank=True, default='')
+    paying_company = serializers.CharField(required=False, allow_blank=True, default='')
+    product_code = serializers.CharField(required=False, allow_blank=True, default='2013')
+    risk_category = serializers.ChoiceField(choices=['1', '2', '3', '4'], default='3')
+    locality_dane_code = serializers.CharField(required=False, allow_blank=True, default='11001')
+    city_name = serializers.CharField(required=False, allow_blank=True, default='')
+    address = serializers.CharField(max_length=120)
+    address_extra = serializers.CharField(required=False, allow_blank=True, default='')
+    building_value = serializers.DecimalField(
+        max_digits=14, decimal_places=2, required=False, default=0,
+    )
+    contents_value = serializers.DecimalField(
+        max_digits=14, decimal_places=2, required=False, default=0,
+    )
+    theft_value = serializers.DecimalField(
+        max_digits=14, decimal_places=2, required=False, default=0,
+    )
+    all_risk_value = serializers.DecimalField(
+        max_digits=14, decimal_places=2, required=False, default=0,
+    )
+    pet_coverage = serializers.ChoiceField(
+        choices=['NO', 'GA', 'PE'], required=False, default='NO',
+    )
+    construction_year = serializers.IntegerField(min_value=1900, max_value=2100)
+    total_floors = serializers.IntegerField(required=False, min_value=1, max_value=200, default=1)
+    apartment_floor = serializers.IntegerField(required=False, min_value=1, max_value=200, default=1)
+    basements = serializers.IntegerField(required=False, min_value=0, max_value=50, default=0)
+    area_sqm = serializers.IntegerField(required=False, min_value=1, max_value=9999, default=50)
+    construction_type = serializers.ChoiceField(
+        choices=['1', '2', '3', '4'], required=False, default='3',
+    )
+    housing_type = serializers.ChoiceField(
+        choices=['1', '2', '3'], required=False, default='2',
+    )
+    payment_frequency = serializers.ChoiceField(
+        choices=['A', 'S', 'T', 'M'], required=False, default='A',
+    )
+    holder_doc_type = serializers.CharField(required=False, allow_blank=True, default='C')
+    holder_doc_number = serializers.CharField(max_length=32)
     is_holder_owner = serializers.BooleanField(required=False, default=True)
     effective_date = serializers.DateField(required=False)
     term_date = serializers.DateField(required=False)

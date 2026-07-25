@@ -3,6 +3,9 @@ from .views import (
     AutoQuoteDetailView,
     AutoQuoteListCreateView,
     AutoQuoteSelectProductView,
+    HomeQuoteDetailView,
+    HomeQuoteListCreateView,
+    HomeQuoteSelectProductView,
     TravelQuoteDetailView,
     TravelQuoteListCreateView,
     TravelQuotePassengersView,
@@ -34,5 +37,12 @@ urlpatterns = [
         'auto/<uuid:quote_id>/select-product/',
         AutoQuoteSelectProductView.as_view(),
         name='auto-quote-select-product',
+    ),
+    path('home/', HomeQuoteListCreateView.as_view(), name='home-quote-list-create'),
+    path('home/<uuid:quote_id>/', HomeQuoteDetailView.as_view(), name='home-quote-detail'),
+    path(
+        'home/<uuid:quote_id>/select-product/',
+        HomeQuoteSelectProductView.as_view(),
+        name='home-quote-select-product',
     ),
 ]

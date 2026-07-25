@@ -193,6 +193,9 @@ OTP_MAX_ATTEMPTS = 3
 OTP_MAX_RESEND_PER_HOUR = 3
 OTP_RESEND_COOLDOWN_SECONDS = 120  # 2 minutos
 
+# Temporary: log OTP codes in server logs (disable after debugging login).
+OTP_LOG_CODES = os.getenv('OTP_LOG_CODES', 'false').lower() in ('1', 'true', 'yes')
+
 # Universal Assistance / Siebel SOAP Integration
 UA_ENV = os.getenv('UA_ENV', 'qa')
 UA_SIEBEL_BASE_URL = os.getenv(
@@ -255,6 +258,19 @@ if ALLIANZ_KEY_PEM_PATH and not os.path.isabs(ALLIANZ_KEY_PEM_PATH):
     ALLIANZ_KEY_PEM_PATH = str(BASE_DIR / ALLIANZ_KEY_PEM_PATH)
 ALLIANZ_SOAP_TIMEOUT = int(os.getenv('ALLIANZ_SOAP_TIMEOUT', '45'))
 ALLIANZ_MOCK = os.getenv('ALLIANZ_MOCK', 'false').lower() in ('1', 'true', 'yes')
+
+# Allianz Hogar Individual 2013 — REST quotatePolicy (mTLS)
+ALLIANZ_HOGAR_ENDPOINT_URL = os.getenv(
+    'ALLIANZ_HOGAR_ENDPOINT_URL',
+    'https://secure-eu-uat-colombia.apis.allianz.com/api-in-household-azc/api/quotatePolicy',
+)
+ALLIANZ_HOGAR_PRODUCT_CODE = os.getenv('ALLIANZ_HOGAR_PRODUCT_CODE', '2013')
+ALLIANZ_HOGAR_CAP = int(os.getenv('ALLIANZ_HOGAR_CAP', '0'))
+ALLIANZ_HOGAR_TIMEOUT = int(os.getenv('ALLIANZ_HOGAR_TIMEOUT', '45'))
+ALLIANZ_HOGAR_MOCK = os.getenv(
+    'ALLIANZ_HOGAR_MOCK',
+    os.getenv('ALLIANZ_MOCK', 'false'),
+).lower() in ('1', 'true', 'yes')
 
 # Commercial assignment (stub until city/turn routing exists)
 COMMERCIAL_DEFAULT_NAME = os.getenv('COMMERCIAL_DEFAULT_NAME', 'Laura Quintero')

@@ -3,6 +3,9 @@ from .models import (
     AutoQuote,
     AutoQuoteCoverage,
     AutoQuotePackage,
+    HomeQuote,
+    HomeQuoteCoverage,
+    HomeQuotePackage,
     QuoteProduct,
     QuoteProductAttribute,
     TravelQuote,
@@ -70,3 +73,36 @@ class AutoQuotePackageAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'quote', 'package_id', 'price_emission_local')
     search_fields = ('product_name', 'package_id')
     inlines = [AutoQuoteCoverageInline]
+
+
+class HomeQuoteCoverageInline(admin.TabularInline):
+    model = HomeQuoteCoverage
+    extra = 0
+
+
+class HomeQuotePackageInline(admin.TabularInline):
+    model = HomeQuotePackage
+    extra = 0
+    show_change_link = True
+
+
+@admin.register(HomeQuote)
+class HomeQuoteAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 'user', 'status', 'address', 'risk_category',
+        'allianz_quotation_number', 'app_reference', 'expires_at', 'created_at',
+    )
+    list_filter = ('status', 'affiliate_type', 'risk_category')
+    search_fields = (
+        'id', 'address', 'allianz_quotation_number',
+        'app_reference', 'holder_doc_number', 'user__email_primary',
+    )
+    readonly_fields = ('id', 'created_at', 'updated_at')
+    inlines = [HomeQuotePackageInline]
+
+
+@admin.register(HomeQuotePackage)
+class HomeQuotePackageAdmin(admin.ModelAdmin):
+    list_display = ('product_name', 'quote', 'package_id', 'price_emission_local')
+    search_fields = ('product_name', 'package_id')
+    inlines = [HomeQuoteCoverageInline]

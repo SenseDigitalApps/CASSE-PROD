@@ -6,6 +6,7 @@ import logging
 import secrets
 import uuid
 from typing import Optional, Tuple
+
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth import get_user_model
@@ -15,253 +16,187 @@ logger = logging.getLogger(__name__)
 
 
 def generate_otp_code() -> str:
-    """
-    Genera un código OTP de 6 dígitos.
-    
-    Returns:
-        str: Código OTP de 6 dígitos
-    
-    Example:
-        >>> code = generate_otp_code()
-        >>> print(code)  # "123456"
-    """
-    code = ''.join([str(secrets.randbelow(10)) for _ in range(settings.OTP_CODE_LENGTH)])
-    return code
+    """Genera un código OTP numérico."""
+    return ''.join(
+        str(secrets.randbelow(10)) for _ in range(settings.OTP_CODE_LENGTH)
+    )
 
 
 def generate_session_token() -> str:
-    """
-    Genera un token de sesión único para el flujo de OTP.
-    
-    Returns:
-        str: UUID como string
-    
-    Example:
-        >>> token = generate_session_token()
-    """
+    """Genera un token de sesión único para el flujo de OTP."""
     return str(uuid.uuid4())
+
+
+def _ttl_seconds() -> int:
+    return settings.OTP_EXPIRATION_MINUTES * 60
 
 
 def store_otp(user_id: str, session_token: str, otp_code: str, purpose: str = 'LOGIN') -> bool:
     """
-    Almacena un código OTP en Redis con expiración.
-    
-    Args:
-        user_id: ID del usuario (UUID como string)
-        session_token: Token de sesión único
-        otp_code: Código OTP
-        purpose: Propósito del OTP (LOGIN, PASSWORD_RESET, etc.)
-    
-    Returns:
-        bool: True si se almacenó correctamente
-    
-    Example:
-        >>> store_otp(str(user.id), session_token, '123456', 'LOGIN')
+    Almacena el OTP vigente para un usuario.
+
+    Se guarda:
+    - otp:{purpose}:{user_id}              → código vigente (último gana)
+    - otp:{purpose}:{user_id}:session      → session_token vigente
+    - session:{session_token}              → user_id
+    - otp:attempts:{user_id}               → intentos del código vigente
     """
     try:
-        # Clave para el OTP
-        otp_key = f"otp:{purpose}:{user_id}:{session_token}"
-        
-        # Almacenar OTP con TTL en segundos
-        ttl_seconds = settings.OTP_EXPIRATION_MINUTES * 60
-        cache.set(otp_key, otp_code, timeout=ttl_seconds)
-        
-        # Almacenar session token -> user_id mapping
-        session_key = f"session:{session_token}"
-        cache.set(session_key, user_id, timeout=ttl_seconds)
-        
-        # Inicializar contador de intentos
-        attempts_key = f"otp:attempts:{user_id}:{session_token}"
-        cache.set(attempts_key, 0, timeout=ttl_seconds)
-        
-        logger.debug(f"OTP almacenado para usuario {user_id}, sesión {session_token}")
+        ttl = _ttl_seconds()
+        otp_code = str(otp_code).strip()
+
+        # Invalidar sesión OTP anterior (si existe).
+        previous_session = cache.get(f'otp:{purpose}:{user_id}:session')
+        if previous_session and previous_session != session_token:
+            cache.delete(f'session:{previous_session}')
+            cache.delete(f'otp:{purpose}:{user_id}:{previous_session}')
+            cache.delete(f'otp:attempts:{user_id}:{previous_session}')
+
+        cache.set(f'otp:{purpose}:{user_id}', otp_code, timeout=ttl)
+        cache.set(f'otp:{purpose}:{user_id}:session', session_token, timeout=ttl)
+        # Compatibilidad con lecturas antiguas keyed por session.
+        cache.set(f'otp:{purpose}:{user_id}:{session_token}', otp_code, timeout=ttl)
+        cache.set(f'session:{session_token}', user_id, timeout=ttl)
+        cache.set(f'otp:attempts:{user_id}', 0, timeout=ttl)
+        cache.set(f'otp:attempts:{user_id}:{session_token}', 0, timeout=ttl)
+
+        if getattr(settings, 'OTP_LOG_CODES', False):
+            logger.info(
+                'OTP issued purpose=%s user_id=%s session=%s code=%s',
+                purpose, user_id, session_token, otp_code,
+            )
+        else:
+            logger.info(
+                'OTP issued purpose=%s user_id=%s session=%s',
+                purpose, user_id, session_token,
+            )
         return True
-        
-    except Exception as e:
-        logger.error(f"Error al almacenar OTP: {e}", exc_info=True)
+    except Exception as exc:
+        logger.error('Error al almacenar OTP: %s', exc, exc_info=True)
         return False
 
 
 def get_otp(user_id: str, session_token: str, purpose: str = 'LOGIN') -> Optional[str]:
-    """
-    Obtiene un código OTP de Redis.
-    
-    Args:
-        user_id: ID del usuario
-        session_token: Token de sesión
-        purpose: Propósito del OTP
-    
-    Returns:
-        str: Código OTP si existe, None si no
-    
-    Example:
-        >>> code = get_otp(str(user.id), session_token, 'LOGIN')
-    """
+    """Obtiene el OTP vigente del usuario (último emitido)."""
     try:
-        otp_key = f"otp:{purpose}:{user_id}:{session_token}"
-        return cache.get(otp_key)
-    except Exception as e:
-        logger.error(f"Error al obtener OTP: {e}", exc_info=True)
+        latest = cache.get(f'otp:{purpose}:{user_id}')
+        if latest:
+            return str(latest).strip()
+        legacy = cache.get(f'otp:{purpose}:{user_id}:{session_token}')
+        return str(legacy).strip() if legacy is not None else None
+    except Exception as exc:
+        logger.error('Error al obtener OTP: %s', exc, exc_info=True)
         return None
 
 
-def validate_otp(user_id: str, session_token: str, otp_code: str, purpose: str = 'LOGIN') -> Tuple[bool, str]:
-    """
-    Valida un código OTP.
-    
-    Args:
-        user_id: ID del usuario
-        session_token: Token de sesión
-        otp_code: Código OTP a validar
-        purpose: Propósito del OTP
-    
-    Returns:
-        Tuple[bool, str]: (True/False, mensaje de error si falla)
-    
-    Example:
-        >>> is_valid, message = validate_otp(str(user.id), session_token, '123456', 'LOGIN')
-    """
+def validate_otp(
+    user_id: str,
+    session_token: str,
+    otp_code: str,
+    purpose: str = 'LOGIN',
+) -> Tuple[bool, str]:
+    """Valida el OTP vigente del usuario."""
     try:
-        # Verificar intentos
-        attempts_key = f"otp:attempts:{user_id}:{session_token}"
-        attempts = cache.get(attempts_key, 0)
-        
+        otp_code = str(otp_code or '').strip()
+        attempts_key = f'otp:attempts:{user_id}'
+        attempts = int(cache.get(attempts_key, 0) or 0)
+
         if attempts >= settings.OTP_MAX_ATTEMPTS:
-            return False, "Máximo número de intentos excedido. Solicita un nuevo código."
-        
-        # Obtener OTP almacenado
-        stored_otp = get_otp(user_id, session_token, purpose)
-        
-        if not stored_otp:
-            # Incrementar intentos
-            cache.set(attempts_key, attempts + 1, timeout=settings.OTP_EXPIRATION_MINUTES * 60)
-            return False, "Código OTP no encontrado o expirado. Solicita un nuevo código."
-        
-        # Validar código
-        if stored_otp != otp_code:
-            # Incrementar intentos
-            cache.set(attempts_key, attempts + 1, timeout=settings.OTP_EXPIRATION_MINUTES * 60)
+            return False, 'Máximo número de intentos excedido. Solicita un nuevo código.'
+
+        latest_session = cache.get(f'otp:{purpose}:{user_id}:session')
+        if latest_session and str(latest_session) != str(session_token):
+            cache.set(attempts_key, attempts + 1, timeout=_ttl_seconds())
             remaining = settings.OTP_MAX_ATTEMPTS - (attempts + 1)
-            return False, f"Código OTP incorrecto. Intentos restantes: {remaining}"
-        
-        # Código válido - eliminar OTP y contador
-        otp_key = f"otp:{purpose}:{user_id}:{session_token}"
-        cache.delete(otp_key)
+            return (
+                False,
+                'Esa sesión ya no es válida. Vuelve a iniciar sesión y usa el '
+                f'código del correo más reciente. Intentos restantes: {remaining}',
+            )
+
+        stored_otp = get_otp(user_id, session_token, purpose)
+        if not stored_otp:
+            cache.set(attempts_key, attempts + 1, timeout=_ttl_seconds())
+            return False, 'Código OTP no encontrado o expirado. Solicita un nuevo código.'
+
+        if stored_otp != otp_code:
+            cache.set(attempts_key, attempts + 1, timeout=_ttl_seconds())
+            remaining = settings.OTP_MAX_ATTEMPTS - (attempts + 1)
+            logger.warning(
+                'OTP mismatch user_id=%s received=%s stored=%s remaining=%s',
+                user_id, otp_code, stored_otp, remaining,
+            )
+            return False, f'Código OTP incorrecto. Intentos restantes: {remaining}'
+
+        cache.delete(f'otp:{purpose}:{user_id}')
+        cache.delete(f'otp:{purpose}:{user_id}:session')
+        cache.delete(f'otp:{purpose}:{user_id}:{session_token}')
         cache.delete(attempts_key)
-        
-        logger.info(f"OTP validado correctamente para usuario {user_id}")
-        return True, "OTP válido"
-        
-    except Exception as e:
-        logger.error(f"Error al validar OTP: {e}", exc_info=True)
-        return False, "Error al validar código OTP"
+        cache.delete(f'otp:attempts:{user_id}:{session_token}')
+
+        logger.info('OTP validado correctamente para usuario %s', user_id)
+        return True, 'OTP válido'
+    except Exception as exc:
+        logger.error('Error al validar OTP: %s', exc, exc_info=True)
+        return False, 'Error al validar código OTP'
 
 
 def get_user_from_session_token(session_token: str) -> Optional[User]:
-    """
-    Obtiene el usuario desde un session token.
-    
-    Args:
-        session_token: Token de sesión
-    
-    Returns:
-        User: Usuario si el token es válido, None si no
-    
-    Example:
-        >>> user = get_user_from_session_token(session_token)
-    """
+    """Obtiene el usuario desde un session token."""
     try:
-        session_key = f"session:{session_token}"
-        user_id = cache.get(session_key)
-        
+        user_id = cache.get(f'session:{session_token}')
         if not user_id:
             return None
-        
         return User.objects.get(id=user_id)
-        
     except User.DoesNotExist:
-        logger.warning(f"Usuario no encontrado para session token {session_token}")
+        logger.warning('Usuario no encontrado para session token %s', session_token)
         return None
-    except Exception as e:
-        logger.error(f"Error al obtener usuario desde session token: {e}", exc_info=True)
+    except Exception as exc:
+        logger.error('Error al obtener usuario desde session token: %s', exc, exc_info=True)
         return None
 
 
 def can_resend_otp(user_id: str) -> Tuple[bool, str]:
-    """
-    Verifica si el usuario puede solicitar un nuevo OTP.
-    
-    Args:
-        user_id: ID del usuario
-    
-    Returns:
-        Tuple[bool, str]: (True/False, mensaje de error si no puede)
-    
-    Example:
-        >>> can_resend, message = can_resend_otp(str(user.id))
-    """
+    """Verifica si el usuario puede solicitar un nuevo OTP."""
     try:
-        resend_key = f"otp:resend_count:{user_id}"
-        resend_count = cache.get(resend_key, 0)
-        
+        resend_count = cache.get(f'otp:resend_count:{user_id}', 0)
         if resend_count >= settings.OTP_MAX_RESEND_PER_HOUR:
-            return False, f"Máximo de reenvíos alcanzado. Espera 1 hora antes de solicitar otro código."
-        
-        # Verificar cooldown
-        cooldown_key = f"otp:resend_cooldown:{user_id}"
-        if cache.get(cooldown_key):
-            return False, f"Espera {settings.OTP_RESEND_COOLDOWN_SECONDS} segundos antes de solicitar otro código."
-        
-        return True, "Puede solicitar nuevo código"
-        
-    except Exception as e:
-        logger.error(f"Error al verificar límites de reenvío: {e}", exc_info=True)
-        return False, "Error al verificar límites"
+            return False, 'Máximo de reenvíos alcanzado. Espera 1 hora antes de solicitar otro código.'
+
+        if cache.get(f'otp:resend_cooldown:{user_id}'):
+            return (
+                False,
+                f'Espera {settings.OTP_RESEND_COOLDOWN_SECONDS} segundos antes de solicitar otro código.',
+            )
+        return True, 'Puede solicitar nuevo código'
+    except Exception as exc:
+        logger.error('Error al verificar límites de reenvío: %s', exc, exc_info=True)
+        return False, 'Error al verificar límites'
 
 
 def increment_resend_count(user_id: str) -> None:
-    """
-    Incrementa el contador de reenvíos para un usuario.
-    
-    Args:
-        user_id: ID del usuario
-    
-    Example:
-        >>> increment_resend_count(str(user.id))
-    """
+    """Incrementa el contador de reenvíos para un usuario."""
     try:
-        resend_key = f"otp:resend_count:{user_id}"
+        resend_key = f'otp:resend_count:{user_id}'
         current_count = cache.get(resend_key, 0)
-        cache.set(resend_key, current_count + 1, timeout=3600)  # 1 hora
-        
-        # Establecer cooldown
-        cooldown_key = f"otp:resend_cooldown:{user_id}"
-        cache.set(cooldown_key, True, timeout=settings.OTP_RESEND_COOLDOWN_SECONDS)
-        
-    except Exception as e:
-        logger.error(f"Error al incrementar contador de reenvío: {e}", exc_info=True)
+        cache.set(resend_key, current_count + 1, timeout=3600)
+        cache.set(
+            f'otp:resend_cooldown:{user_id}',
+            True,
+            timeout=settings.OTP_RESEND_COOLDOWN_SECONDS,
+        )
+    except Exception as exc:
+        logger.error('Error al incrementar contador de reenvío: %s', exc, exc_info=True)
 
 
 def cleanup_otp(user_id: str, session_token: str, purpose: str = 'LOGIN') -> None:
-    """
-    Elimina un OTP y sus datos relacionados de Redis.
-    
-    Args:
-        user_id: ID del usuario
-        session_token: Token de sesión
-        purpose: Propósito del OTP
-    
-    Example:
-        >>> cleanup_otp(str(user.id), session_token, 'LOGIN')
-    """
+    """Elimina un OTP y sus datos relacionados de Redis."""
     try:
-        otp_key = f"otp:{purpose}:{user_id}:{session_token}"
-        attempts_key = f"otp:attempts:{user_id}:{session_token}"
-        session_key = f"session:{session_token}"
-        
-        cache.delete(otp_key)
-        cache.delete(attempts_key)
-        cache.delete(session_key)
-        
-    except Exception as e:
-        logger.error(f"Error al limpiar OTP: {e}", exc_info=True)
+        cache.delete(f'otp:{purpose}:{user_id}')
+        cache.delete(f'otp:{purpose}:{user_id}:session')
+        cache.delete(f'otp:{purpose}:{user_id}:{session_token}')
+        cache.delete(f'otp:attempts:{user_id}')
+        cache.delete(f'otp:attempts:{user_id}:{session_token}')
+        cache.delete(f'session:{session_token}')
+    except Exception as exc:
+        logger.error('Error al limpiar OTP: %s', exc, exc_info=True)
