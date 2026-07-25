@@ -105,6 +105,7 @@ class TravelQuoteListSerializer(serializers.ModelSerializer):
             'id',
             'status',
             'affiliate_type',
+            'affiliation_number',
             'destination_ui_code',
             'destination_siebel',
             'trip_type',
@@ -144,6 +145,9 @@ class TravelQuoteDetailSerializer(serializers.ModelSerializer):
             'id',
             'status',
             'affiliate_type',
+            'affiliation_number',
+            'payment_form',
+            'paying_company',
             'origin_country',
             'destination_ui_code',
             'destination_siebel',
@@ -189,6 +193,9 @@ class TravelQuoteCreateSerializer(serializers.Serializer):
         choices=TravelQuote.AffiliateType.choices,
         default=TravelQuote.AffiliateType.INDIVIDUAL,
     )
+    affiliation_number = serializers.CharField(required=False, allow_blank=True, default='')
+    payment_form = serializers.CharField(required=False, allow_blank=True, default='')
+    paying_company = serializers.CharField(required=False, allow_blank=True, default='')
     destination_ui_code = serializers.CharField(required=False, allow_blank=True)
     destination_siebel = serializers.CharField(required=False, allow_blank=True)
     origin_country = serializers.CharField(required=False, allow_blank=True)
@@ -313,6 +320,9 @@ class AutoQuoteListSerializer(serializers.ModelSerializer):
             'id',
             'status',
             'affiliate_type',
+            'affiliation_number',
+            'payment_form',
+            'paying_company',
             'vehicle_plate',
             'vehicle_brand',
             'vehicle_line',
@@ -348,6 +358,9 @@ class AutoQuoteDetailSerializer(serializers.ModelSerializer):
             'id',
             'status',
             'affiliate_type',
+            'affiliation_number',
+            'payment_form',
+            'paying_company',
             'product_code',
             'vehicle_plate',
             'vehicle_year',
@@ -403,6 +416,9 @@ class AutoQuoteCreateSerializer(serializers.Serializer):
         choices=AutoQuote.AffiliateType.choices,
         default=AutoQuote.AffiliateType.INDIVIDUAL,
     )
+    affiliation_number = serializers.CharField(required=False, allow_blank=True, default='')
+    payment_form = serializers.CharField(required=False, allow_blank=True, default='')
+    paying_company = serializers.CharField(required=False, allow_blank=True, default='')
     product_code = serializers.CharField(required=False, allow_blank=True, default='1243')
     vehicle_plate = serializers.CharField(max_length=12)
     vehicle_year = serializers.IntegerField(required=False, min_value=1980, max_value=2100)

@@ -12,6 +12,12 @@
     <li><strong>Cliente:</strong> {{ user.full_name }}</li>
     <li><strong>Email:</strong> {{ quote.contact_email|default:user.email_primary }}</li>
     <li><strong>Teléfono:</strong> {{ quote.contact_phone|default:user.phone }}</li>
+    <li><strong>Tipo afiliado:</strong> {{ quote.get_affiliate_type_display }}</li>
+    {% if quote.affiliate_type == 'CAVIPETROL' %}
+    <li><strong>Nº afiliación:</strong> {{ quote.affiliation_number }}</li>
+    <li><strong>Forma de pago:</strong> {{ quote.payment_form }}</li>
+    <li><strong>Empresa pagadora:</strong> {{ quote.paying_company }}</li>
+    {% endif %}
     <li><strong>Aseguradora:</strong> {{ insurer_name }} ({{ insurer_reference }})</li>
     <li><strong>Plan:</strong> {{ product_name }}</li>
     <li><strong>Valor:</strong> {{ currency }} {{ price }}</li>

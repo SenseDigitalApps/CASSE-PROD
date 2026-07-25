@@ -35,6 +35,9 @@ class TravelQuote(models.Model):
         choices=AffiliateType.choices,
         default=AffiliateType.INDIVIDUAL,
     )
+    affiliation_number = models.CharField(max_length=40, blank=True, default='')
+    payment_form = models.CharField(max_length=40, blank=True, default='')
+    paying_company = models.CharField(max_length=120, blank=True, default='')
     origin_country = models.CharField(max_length=50, default='COLOMBIA')
     destination_ui_code = models.CharField(max_length=50, blank=True, default='')
     destination_siebel = models.CharField(max_length=100)
@@ -245,6 +248,9 @@ class AutoQuote(models.Model):
         choices=AffiliateType.choices,
         default=AffiliateType.INDIVIDUAL,
     )
+    affiliation_number = models.CharField(max_length=40, blank=True, default='')
+    payment_form = models.CharField(max_length=40, blank=True, default='')
+    paying_company = models.CharField(max_length=120, blank=True, default='')
     product_code = models.CharField(max_length=8, default='1243')
     vehicle_plate = models.CharField(max_length=12)
     vehicle_year = models.PositiveSmallIntegerField(null=True, blank=True)

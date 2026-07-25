@@ -221,6 +221,9 @@ def create_travel_quote(
     quote = TravelQuote.objects.create(
         user=user,
         affiliate_type=data.get('affiliate_type', TravelQuote.AffiliateType.INDIVIDUAL),
+        affiliation_number=(data.get('affiliation_number') or '').strip(),
+        payment_form=(data.get('payment_form') or '').strip(),
+        paying_company=(data.get('paying_company') or '').strip(),
         origin_country=data.get('origin_country', settings.UA_DEFAULT_ORIGIN_COUNTRY),
         destination_ui_code=ui_code,
         destination_siebel=destination_siebel,

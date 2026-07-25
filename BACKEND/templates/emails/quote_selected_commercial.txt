@@ -6,7 +6,11 @@ Consecutivo app: {{ app_reference }}
 Cliente: {{ user.full_name }}
 Email: {{ quote.contact_email|default:user.email_primary }}
 Teléfono: {{ quote.contact_phone|default:user.phone }}
-Aseguradora: {{ insurer_name }} ({{ insurer_reference }})
+Tipo afiliado: {{ quote.get_affiliate_type_display }}
+{% if quote.affiliate_type == 'CAVIPETROL' %}Nº afiliación: {{ quote.affiliation_number }}
+Forma de pago: {{ quote.payment_form }}
+Empresa pagadora: {{ quote.paying_company }}
+{% endif %}Aseguradora: {{ insurer_name }} ({{ insurer_reference }})
 Plan: {{ product_name }}
 Valor: {{ currency }} {{ price }}
 Destino: {{ destination }}

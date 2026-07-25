@@ -208,6 +208,9 @@ def create_auto_quote(
     quote = AutoQuote.objects.create(
         user=user,
         affiliate_type=data.get('affiliate_type', AutoQuote.AffiliateType.INDIVIDUAL),
+        affiliation_number=(data.get('affiliation_number') or '').strip(),
+        payment_form=(data.get('payment_form') or '').strip(),
+        paying_company=(data.get('paying_company') or '').strip(),
         product_code=data.get('product_code') or settings.ALLIANZ_PRODUCT_CODE,
         vehicle_plate=plate,
         vehicle_year=data.get('vehicle_year'),
