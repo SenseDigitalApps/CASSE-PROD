@@ -1,0 +1,97 @@
+<wsdl:definitions targetNamespace="http://ws.allianz.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns="http://ws.allianz.com" xmlns:ns1="http://org.apache.axis2/xsd">
+   <wsdl:documentation>AutosIndividualWS</wsdl:documentation>
+   <wsdl:types>
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws.allianz.com">
+         <xs:element name="AutosIndividualWSException">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="AutosIndividualWSException" nillable="true" type="ns:Exception"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:complexType name="Exception">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:element name="call">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="xml" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="callResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+      </xs:schema>
+   </wsdl:types>
+   <wsdl:message name="callRequest">
+      <wsdl:part name="parameters" element="ns:call"/>
+   </wsdl:message>
+   <wsdl:message name="callResponse">
+      <wsdl:part name="parameters" element="ns:callResponse"/>
+   </wsdl:message>
+   <wsdl:message name="AutosIndividualWSException">
+      <wsdl:part name="parameters" element="ns:AutosIndividualWSException"/>
+   </wsdl:message>
+   <wsdl:portType name="AutosIndividualWSPortType">
+      <wsdl:operation name="call">
+         <wsdl:input message="ns:callRequest" wsaw:Action="urn:call"/>
+         <wsdl:output message="ns:callResponse" wsaw:Action="urn:callResponse"/>
+         <wsdl:fault message="ns:AutosIndividualWSException" name="AutosIndividualWSException" wsaw:Action="urn:callAutosIndividualWSException"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="AutosIndividualWSSoap11Binding" type="ns:AutosIndividualWSPortType">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      <wsdl:operation name="call">
+         <soap:operation soapAction="urn:call" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+         <wsdl:fault name="AutosIndividualWSException">
+            <soap:fault use="literal" name="AutosIndividualWSException"/>
+         </wsdl:fault>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="AutosIndividualWSSoap12Binding" type="ns:AutosIndividualWSPortType">
+      <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      <wsdl:operation name="call">
+         <soap12:operation soapAction="urn:call" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+         <wsdl:fault name="AutosIndividualWSException">
+            <soap12:fault use="literal" name="AutosIndividualWSException"/>
+         </wsdl:fault>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="AutosIndividualWSHttpBinding" type="ns:AutosIndividualWSPortType">
+      <http:binding verb="POST"/>
+      <wsdl:operation name="call">
+         <http:operation location="call"/>
+         <wsdl:input>
+            <mime:content type="application/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="application/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="AutosIndividualWS">
+      <wsdl:port name="AutosIndividualWSHttpSoap11Endpoint" binding="ns:AutosIndividualWSSoap11Binding">
+         <soap:address location="https://wspre.allianzseguros.com/drswoc16/services/AutosIndividualWS"/>
+      </wsdl:port>
+      
+   </wsdl:service>
+</wsdl:definitions>

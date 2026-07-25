@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import (
+    AutoQuoteDetailView,
+    AutoQuoteListCreateView,
+    AutoQuoteSelectProductView,
     TravelQuoteDetailView,
     TravelQuoteListCreateView,
     TravelQuotePassengersView,
@@ -24,5 +27,12 @@ urlpatterns = [
         'travel/<uuid:quote_id>/passengers/',
         TravelQuotePassengersView.as_view(),
         name='travel-quote-passengers',
+    ),
+    path('auto/', AutoQuoteListCreateView.as_view(), name='auto-quote-list-create'),
+    path('auto/<uuid:quote_id>/', AutoQuoteDetailView.as_view(), name='auto-quote-detail'),
+    path(
+        'auto/<uuid:quote_id>/select-product/',
+        AutoQuoteSelectProductView.as_view(),
+        name='auto-quote-select-product',
     ),
 ]

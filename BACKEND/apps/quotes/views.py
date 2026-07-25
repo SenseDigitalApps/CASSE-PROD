@@ -1,4 +1,4 @@
-"""Views for travel quote endpoints."""
+"""Views for travel and auto quote endpoints."""
 import logging
 
 from rest_framework import status
@@ -7,12 +7,22 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.quotes.serializers import (
+    AutoQuoteCreateSerializer,
+    AutoQuoteDetailSerializer,
+    AutoQuoteListSerializer,
     SaveQuotePassengersSerializer,
     SelectProductSerializer,
     TravelQuoteCreateSerializer,
     TravelQuoteDetailSerializer,
     TravelQuoteListSerializer,
     TravelQuoteRequoteSerializer,
+)
+from apps.quotes.services.auto_quote_service import (
+    AutoQuoteServiceError,
+    create_auto_quote,
+    get_user_auto_quote,
+    list_user_auto_quotes,
+    select_auto_quote_product,
 )
 from apps.quotes.services.quote_service import (
     QuoteServiceError,
@@ -146,3 +156,72 @@ class TravelQuotePassengersView(APIView):
             return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(TravelQuoteDetailSerializer(quote).data)
+
+
+class AutoQuoteListCreateView(APIView):
+    """
+    GET  /api/v1/quotes/auto/ — historial de cotizaciones de autos
+    POST /api/v1/quotes/auto/ — nueva cotización Allianz Call4
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        include_expired = request.query_params.get('include_expired', '').lower() == 'true'
+        quotes = list_user_auto_quotes(user=request.user, include_expired=include_expired)
+        serializer = AutoQuoteListSerializer(quotes, many=True)
+        return Response({'items': serializer.data})
+
+    def post(self, request):
+        serializer = AutoQuoteCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            quote = create_auto_quote(
+                user=request.user,
+                data=serializer.validated_data,
+                ip_address=get_client_ip(request),
+                correlation_id=request.META.get('CORRELATION_ID', ''),
+            )
+        except AutoQuoteServiceError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            AutoQuoteDetailSerializer(quote).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class AutoQuoteDetailView(APIView):
+    """GET /api/v1/quotes/auto/<uuid>/"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, quote_id):
+        try:
+            quote = get_user_auto_quote(user=request.user, quote_id=quote_id)
+        except AutoQuoteServiceError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(AutoQuoteDetailSerializer(quote).data)
+
+
+class AutoQuoteSelectProductView(APIView):
+    """POST /api/v1/quotes/auto/<uuid>/select-product/ — Lo quiero + comercial."""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, quote_id):
+        serializer = SelectProductSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            quote = get_user_auto_quote(user=request.user, quote_id=quote_id)
+            quote = select_auto_quote_product(
+                quote=quote,
+                product_id=serializer.validated_data['product_id'],
+                ip_address=get_client_ip(request),
+            )
+        except AutoQuoteServiceError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(AutoQuoteDetailSerializer(quote).data)

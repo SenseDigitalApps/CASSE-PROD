@@ -218,6 +218,44 @@ UA_CONTROL_NUMBER_PREFIX = os.getenv('UA_CONTROL_NUMBER_PREFIX', 'CASSE')
 UA_LEAD_RETIRE_REASON_CODE = os.getenv('UA_LEAD_RETIRE_REASON_CODE', 'Venta Online')
 QUOTE_EXPIRATION_HOURS = int(os.getenv('QUOTE_EXPIRATION_HOURS', '24'))
 
+# Allianz Autos Individual (Call4 / ramos 1241-1243) — mTLS
+ALLIANZ_ENV = os.getenv('ALLIANZ_ENV', 'uat')
+ALLIANZ_ENDPOINT_URL = os.getenv(
+    'ALLIANZ_ENDPOINT_URL',
+    'https://secure-eu-uat-colombia.apis.allianz.com/drswoc16/services/AutosIndividualWS?codCia=3',
+)
+ALLIANZ_COMPANY = os.getenv('ALLIANZ_COMPANY', 'COL')
+ALLIANZ_PARTNER_ID = os.getenv('ALLIANZ_PARTNER_ID', '')
+ALLIANZ_AGENT_ID = os.getenv('ALLIANZ_AGENT_ID', '')
+ALLIANZ_PARTNER_CODE = os.getenv('ALLIANZ_PARTNER_CODE', '')
+ALLIANZ_AGENT_CODE = os.getenv('ALLIANZ_AGENT_CODE', '')
+ALLIANZ_PRODUCT_CODE = os.getenv('ALLIANZ_PRODUCT_CODE', '1243')
+ALLIANZ_DEFAULT_RISK_TYPE = os.getenv('ALLIANZ_DEFAULT_RISK_TYPE', 'L0008')
+ALLIANZ_VEHICLE_ORIGIN = os.getenv('ALLIANZ_VEHICLE_ORIGIN', '480')
+ALLIANZ_CAP = os.getenv('ALLIANZ_CAP', '3')
+ALLIANZ_PFX_PATH = os.getenv(
+    'ALLIANZ_PFX_PATH',
+    str(BASE_DIR / 'certs' / 'allianz_uat.pfx'),
+)
+ALLIANZ_PFX_PASSWORD = os.getenv('ALLIANZ_PFX_PASSWORD', '')
+ALLIANZ_CERT_PEM_PATH = os.getenv(
+    'ALLIANZ_CERT_PEM_PATH',
+    str(BASE_DIR / 'certs' / 'allianz_uat_cert.pem'),
+)
+ALLIANZ_KEY_PEM_PATH = os.getenv(
+    'ALLIANZ_KEY_PEM_PATH',
+    str(BASE_DIR / 'certs' / 'allianz_uat_key.pem'),
+)
+# Resolve relative cert paths against BASE_DIR (manage.py cwd can vary).
+if ALLIANZ_PFX_PATH and not os.path.isabs(ALLIANZ_PFX_PATH):
+    ALLIANZ_PFX_PATH = str(BASE_DIR / ALLIANZ_PFX_PATH)
+if ALLIANZ_CERT_PEM_PATH and not os.path.isabs(ALLIANZ_CERT_PEM_PATH):
+    ALLIANZ_CERT_PEM_PATH = str(BASE_DIR / ALLIANZ_CERT_PEM_PATH)
+if ALLIANZ_KEY_PEM_PATH and not os.path.isabs(ALLIANZ_KEY_PEM_PATH):
+    ALLIANZ_KEY_PEM_PATH = str(BASE_DIR / ALLIANZ_KEY_PEM_PATH)
+ALLIANZ_SOAP_TIMEOUT = int(os.getenv('ALLIANZ_SOAP_TIMEOUT', '45'))
+ALLIANZ_MOCK = os.getenv('ALLIANZ_MOCK', 'false').lower() in ('1', 'true', 'yes')
+
 # Commercial assignment (stub until city/turn routing exists)
 COMMERCIAL_DEFAULT_NAME = os.getenv('COMMERCIAL_DEFAULT_NAME', 'Laura Quintero')
 COMMERCIAL_DEFAULT_EMAIL = os.getenv(

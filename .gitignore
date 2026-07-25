@@ -112,6 +112,9 @@ secrets/
 *.pem
 *.key
 *.crt
+*.pfx
+*.p12
+BACKEND/certs/
 
 # Documentation and specs (excluded from repository)
 BACKEND/specs/

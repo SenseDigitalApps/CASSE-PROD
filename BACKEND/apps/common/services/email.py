@@ -129,9 +129,9 @@ def send_quote_selected_emails(quote) -> tuple[bool, bool]:
         'insurer_name': quote.display_insurer_name,
         'commercial_name': quote.assigned_commercial_name,
         'commercial_title': quote.assigned_commercial_title,
-        'destination': quote.destination_siebel,
-        'start_date': quote.start_date,
-        'end_date': quote.end_date,
+        'destination': getattr(quote, 'destination_siebel', '') or getattr(quote, 'vehicle_plate', ''),
+        'start_date': getattr(quote, 'start_date', None) or getattr(quote, 'effective_date', None),
+        'end_date': getattr(quote, 'end_date', None) or getattr(quote, 'term_date', None),
         'site_name': 'CASSE Seguros',
     }
 

@@ -1,7 +1,15 @@
 """Serializers for travel quote API."""
 from rest_framework import serializers
 
-from apps.quotes.models import QuotePassenger, QuoteProduct, QuoteProductAttribute, TravelQuote
+from apps.quotes.models import (
+    AutoQuote,
+    AutoQuoteCoverage,
+    AutoQuotePackage,
+    QuotePassenger,
+    QuoteProduct,
+    QuoteProductAttribute,
+    TravelQuote,
+)
 
 
 class QuotePassengerSerializer(serializers.ModelSerializer):
@@ -240,3 +248,182 @@ class TravelQuoteRequoteSerializer(serializers.Serializer):
 
 class SelectProductSerializer(serializers.Serializer):
     product_id = serializers.UUIDField()
+
+
+class AutoQuoteCoverageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutoQuoteCoverage
+        fields = ('coverage_id', 'name', 'visible_name', 'unit', 'value', 'deductible')
+
+
+class AutoQuotePackageSerializer(serializers.ModelSerializer):
+    coverage_attributes = AutoQuoteCoverageSerializer(source='attributes', many=True)
+    prices = serializers.SerializerMethodField()
+    payments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AutoQuotePackage
+        fields = (
+            'id',
+            'package_id',
+            'product_id_siebel',
+            'product_name',
+            'brand',
+            'logo',
+            'prices',
+            'payments',
+            'coverage_attributes',
+        )
+
+    def get_prices(self, obj: AutoQuotePackage) -> dict:
+        return {
+            'emission': obj.price_emission,
+            'emission_local': obj.price_emission_local,
+            'gross': obj.price_gross,
+            'gross_local': obj.price_gross_local,
+            'unit': obj.price_unit,
+            'net': obj.price_net,
+            'net_local': obj.price_net_local,
+            'currency': obj.currency,
+            'currency_local': obj.currency_local,
+        }
+
+    def get_payments(self, obj: AutoQuotePackage) -> dict:
+        return {
+            'annual': obj.premium_annual,
+            'monthly': obj.premium_monthly,
+            'semestral': obj.premium_semestral,
+            'trimestral': obj.premium_trimestral,
+        }
+
+
+class AutoQuoteListSerializer(serializers.ModelSerializer):
+    products_count = serializers.SerializerMethodField()
+    is_expired = serializers.BooleanField(read_only=True)
+    selected_product_id = serializers.UUIDField(
+        source='selected_product.id',
+        read_only=True,
+        allow_null=True,
+    )
+    insurer_display = serializers.CharField(source='display_insurer_name', read_only=True)
+
+    class Meta:
+        model = AutoQuote
+        fields = (
+            'id',
+            'status',
+            'affiliate_type',
+            'vehicle_plate',
+            'vehicle_brand',
+            'vehicle_line',
+            'vehicle_year',
+            'allianz_quotation_number',
+            'products_count',
+            'selected_product_id',
+            'app_reference',
+            'insurer_reference',
+            'insurer_display',
+            'assigned_commercial_name',
+            'is_expired',
+            'expires_at',
+            'created_at',
+        )
+
+    def get_products_count(self, obj: AutoQuote) -> int:
+        if hasattr(obj, '_prefetched_objects_cache') and 'products' in obj._prefetched_objects_cache:
+            return len(obj.products.all())
+        return obj.products.count()
+
+
+class AutoQuoteDetailSerializer(serializers.ModelSerializer):
+    products = AutoQuotePackageSerializer(many=True, read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    selected_product = AutoQuotePackageSerializer(read_only=True)
+    insurer_display = serializers.CharField(source='display_insurer_name', read_only=True)
+    client_notification_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AutoQuote
+        fields = (
+            'id',
+            'status',
+            'affiliate_type',
+            'product_code',
+            'vehicle_plate',
+            'vehicle_year',
+            'fasecolda_code',
+            'risk_type',
+            'is_new_vehicle',
+            'in_dealership',
+            'insured_value',
+            'circulation_dane_code',
+            'circulation_city_name',
+            'holder_doc_type',
+            'holder_doc_number',
+            'holder_born_date',
+            'holder_sex',
+            'is_holder_driver',
+            'is_holder_owner',
+            'effective_date',
+            'term_date',
+            'allianz_quotation_number',
+            'vehicle_brand',
+            'vehicle_line',
+            'vehicle_version',
+            'contact_first_name',
+            'contact_last_name',
+            'contact_email',
+            'contact_phone',
+            'products',
+            'selected_product',
+            'app_reference',
+            'insurer_reference',
+            'insurer_name',
+            'insurer_display',
+            'assigned_commercial_name',
+            'assigned_commercial_email',
+            'assigned_commercial_title',
+            'client_notified_at',
+            'commercial_notified_at',
+            'client_notification_label',
+            'selected_at',
+            'is_expired',
+            'expires_at',
+            'created_at',
+            'updated_at',
+        )
+
+    def get_client_notification_label(self, obj: AutoQuote) -> str:
+        from apps.quotes.services.commercial_assignment import relative_notified_label
+        return relative_notified_label(obj.client_notified_at)
+
+
+class AutoQuoteCreateSerializer(serializers.Serializer):
+    affiliate_type = serializers.ChoiceField(
+        choices=AutoQuote.AffiliateType.choices,
+        default=AutoQuote.AffiliateType.INDIVIDUAL,
+    )
+    product_code = serializers.CharField(required=False, allow_blank=True, default='1243')
+    vehicle_plate = serializers.CharField(max_length=12)
+    vehicle_year = serializers.IntegerField(required=False, min_value=1980, max_value=2100)
+    fasecolda_code = serializers.CharField(required=False, allow_blank=True, default='')
+    risk_type = serializers.CharField(required=False, allow_blank=True, default='L0008')
+    is_new_vehicle = serializers.BooleanField(required=False, default=False)
+    in_dealership = serializers.BooleanField(required=False, default=False)
+    insured_value = serializers.DecimalField(
+        max_digits=14, decimal_places=2, required=False, default=0,
+    )
+    circulation_dane_code = serializers.CharField(required=False, allow_blank=True, default='11001')
+    circulation_city_name = serializers.CharField(required=False, allow_blank=True, default='')
+    holder_doc_type = serializers.CharField(required=False, allow_blank=True, default='C')
+    holder_doc_number = serializers.CharField(max_length=32)
+    holder_born_date = serializers.DateField()
+    holder_sex = serializers.CharField(required=False, allow_blank=True, default='M')
+    is_holder_driver = serializers.BooleanField(required=False, default=True)
+    is_holder_owner = serializers.BooleanField(required=False, default=True)
+    effective_date = serializers.DateField(required=False)
+    term_date = serializers.DateField(required=False)
+    contact_first_name = serializers.CharField(required=False, allow_blank=True)
+    contact_last_name = serializers.CharField(required=False, allow_blank=True)
+    contact_email = serializers.EmailField(required=False, allow_blank=True)
+    contact_phone = serializers.CharField(required=False, allow_blank=True)

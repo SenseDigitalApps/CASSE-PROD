@@ -39,7 +39,10 @@ def root_view(request):
                 "travel_detail": "/api/v1/quotes/travel/{id}/",
                 "travel_requote": "/api/v1/quotes/travel/{id}/requote/",
                 "travel_select": "/api/v1/quotes/travel/{id}/select-product/",
-                "travel_passengers": "/api/v1/quotes/travel/{id}/passengers/"
+                "travel_passengers": "/api/v1/quotes/travel/{id}/passengers/",
+                "auto_list": "/api/v1/quotes/auto/",
+                "auto_detail": "/api/v1/quotes/auto/{id}/",
+                "auto_select": "/api/v1/quotes/auto/{id}/select-product/"
             },
             "payments": {
                 "initiate": "/api/v1/payments/travel-quotes/{quote_id}/initiate/",
